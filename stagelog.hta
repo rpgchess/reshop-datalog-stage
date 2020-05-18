@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="x-ua-compatible" content="ie=8">
+    <title>RESHOP STAGE LOG</title>
+    <HTA:APPLICATION
+        ID="app"
+        APPLICATIONNAME="DB"
+        BORDER="dialog"
+        BORDERSTYLE="static"
+        CAPTION="yes"
+        NAVIGABLE="yes"
+        ICON="icons/linx.ico"
+        INNERBORDER="no"
+        MAXIMIZEBUTTON="no"
+        MINIMIZEBUTTON="no"
+        SCROLL="auto"
+        SHOWINTASKBAR="yes"
+        SINGLEINSTANCE="no"
+        SYSMENU="yes"
+        VERSION="1.0"
+        WINDOWSTATE="normal"
+    />
+
+    <!-- <link rel="shortcut icon" href="icons/linx.ico" /> -->
+
+    <!-- Bootstrap links CDN-->
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/3.3.2/css/bootstrap.min.css">
+    <!-- <link rel="stylesheet" href="https://maxcdn.Bootstrapcdn.com/Bootstrap/3.3.2/css/Bootstrap.min.css">
+    <link rel="stylesheet" href="https://maxcdn.Bootstrapcdn.com/Bootstrap/3.3.2/css/Bootstrap-theme.min.css"> -->
+    <link rel="stylesheet" href="https://cdn.datatables.net/1.10.19/css/jquery.dataTables.min.css">
+    <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+    <div class="input-group input-group-sm">
+        <span class="input-group-addon" id="sizing-addon3">Caminho do Arquivo:</span>
+        <input type="text" name="filename" id="filename" class="form-control" aria-describedby="sizing-addon3">
+    </div>
+    <table id="datatable" class="display compact" style="width:100%">
+        <thead>
+            <tr>
+                <th>Data</th>
+                <th>NSU</th>
+                <th>URL</th>
+                <th>Requisição</th>
+                <th>Resposta</th>
+                <th>Tenant</th>
+                <th>Usuário</th>
+                <th>Client</th>
+                <th>Terminal</th>
+            </tr>
+        </thead>
+        <tbody>
+
+        </tbody>
+    </table>
+    <!-- Dependência jQuery and Bootstrap -->
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.2/jquery.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/3.3.2/js/bootstrap.min.js"></script>
+    <!-- <script src="https://maxcdn.Bootstrapcdn.com/Bootstrap/3.3.2/js/Bootstrap.min.js"></script> -->
+    <script src="https://cdn.datatables.net/1.10.19/js/jquery.dataTables.min.js"></script>
+    <script src="js/utils.js"></script>
+    <script src="js/file.js"></script>
+    <script src="js/db.js"></script>
+    <script src="config/db-stagelog.config"></script>
+    <script src="js/main.js"></script>
+</body>
+</html>
