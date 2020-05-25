@@ -20,7 +20,7 @@ $(document).ready(function () {
                                   '\t\t\t\t-qtd-url [qtde] [url]\n\t\t\t\t\t\t\t\tAPI Endpoint por quantidade\n\n' +
                                   '\t\t\t\t-tenant-url [tenant] [url]\n\t\t\t\t\t\t\t\tIdentificação da Loja e API Endpoint\n\n' +
                                   '\t\t\t\t-qtd-tenant-url [qtde] [tenant] [url]\n\t\t\t\t\t\t\t\tIdentificação da Loja e API Endpoint por quantidade';
-        appResize(420, 500);
+        appResize(420, 620);
         return false;
     }
 
@@ -44,11 +44,11 @@ $(document).ready(function () {
     var index = 0;
     while (!db_stagelog.record.eof) {//DateTime, TransactionNumber, Url, RequestContent, ResponseContent, TenantId, UserId, ClientId, TerminalCode
         index++;
-        sNsu = db_stagelog.record('TransactionNumber');
-        sUrl = String(db_stagelog.record('Url')).replace('http://', '').replace('https://', '').replace('unicostage.azurewebsites.net', '');
-        sReq = JSON.stringify(db_stagelog.record('RequestContent').value);
+        sNsu = String(db_stagelog.record('TransactionNumber').value);
+        sUrl = String(db_stagelog.record('Url').value).replace('http://', '').replace('https://', '').replace('unicostage.azurewebsites.net', '').replace('reshop-stage.linx.com.br', '').replace('localhost:52401', '');
+        sReq = JSON.stringify(db_stagelog.record('RequestContent').value); 
         sRes = JSON.stringify(db_stagelog.record('ResponseContent').value);
-        sClient = db_stagelog.record('ClientId');
+        sClient = String(db_stagelog.record('ClientId').value);
         sFilename = filename.value +  index + ' ' + sUrl.replace('/api/', '').replace('fidelidade/', '').replace('ecommerce/', '').replace('statistics/', '');
         //alert(sNsu + '\n' + sReq + '\n' + sRes + '\n' + sClient);
         $('#datatable').DataTable({
@@ -64,8 +64,8 @@ $(document).ready(function () {
             searching: false
         }).row.add([
             String(db_stagelog.record('Datetime')).split(' UTC')[0],
-            '',//(sNsu != undefined)? sNsu : '',
-            sUrl,
+            (sNsu != undefined)? sNsu : '',
+            sUrl, 
             (sReq != undefined)? '<a class=\'label label-primary\' href=\'javascript:copy(' + sReq + ');\' target=\'_self\'>Copiar</a><a class=\'label label-default\' href=\'#\' target=\'_self\'>Salvar</a>' : '',
             (sRes != undefined)? '<a class=\'label label-primary\' href=\'javascript:copy(' + sRes + ');\' target=\'_self\'>Copiar</a><a class=\'label label-default\' href=\'#\' target=\'_self\'>Salvar</a>' : '',
             String(db_stagelog.record('TenantId')),

@@ -18,10 +18,3 @@ function scriptVersion() {
     alert(ver);
     return ver;
 }
-
-function replaceStrings(texto, vetorStrings) {
-    for (var i = 0; i < vetorStrings.lenght; i++) {
-        texto = texto.replace(vetorStrings[i], '');
-    }
-    return texto;
-}

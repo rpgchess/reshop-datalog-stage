@@ -6,6 +6,7 @@ function readFile(filename) {
     fileread.close();
     return contents;
 }
+
 function saveFile(filename, contents) {
     var fso = new ActiveXObject("Scripting.FileSystemObject");
     var filesave = fso.CreateTextFile(filename, true);
