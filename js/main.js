@@ -12,15 +12,19 @@ $(document).ready(function () {
     var args = app.commandLine.split(' ');
     if (args[2] == undefined || args[3] == undefined) {
         document.body.innerText = '\n\t\tParâmetros:\n\n' +
-                                  '\t\t\t\t-qtd [qtde]\n\t\t\t\t\t\t\t\tUltimos registros\n\n' +
-                                  '\t\t\t\t-nsu [nsu]\n\t\t\t\t\t\t\t\tNúmero da Transação\n\n' +
-                                  '\t\t\t\t-tenant [tenant]\n\t\t\t\t\t\t\t\tIdentificação da Loja\n\n' +
-                                  '\t\t\t\t-qtd-tenant [qtde] [tenant]\n\t\t\t\t\t\t\t\tIdentificação da Loja por quantidade\n\n' +
+                                  '\t\t\t\t-q ou -qtd [qtde]\n\t\t\t\t\t\t\t\tUltimos registros\n\n' +
+                                  '\t\t\t\t-n ou -nsu [nsu]\n\t\t\t\t\t\t\t\tNúmero da Transação\n\n' +
+                                  '\t\t\t\t-u ou -user [user]\n\t\t\t\t\t\t\t\tEmail do usuário\n\n' +
+                                  '\t\t\t\t-uu ou -user-url [user] [url]\n\t\t\t\t\t\t\t\tEmail do usuário e API Endpoint\n\n' +
+                                  '\t\t\t\t-qu ou -qtd-user [qtd] [user]\n\t\t\t\t\t\t\t\tEmail do usuário por quantidade\n\n' +
+                                  '\t\t\t\t-quu ou -qtd-user-url [qtd] [user] [url]\n\t\t\t\t\t\t\t\tEmail do usuário e API Endpoint por quantidade \n\n' +
+                                  '\t\t\t\t-t ou -tenant [tenant]\n\t\t\t\t\t\t\t\tIdentificação da Loja\n\n' +
+                                  '\t\t\t\t-qt ou -qtd-tenant [qtde] [tenant]\n\t\t\t\t\t\t\t\tIdentificação da Loja por quantidade\n\n' +
                                   '\t\t\t\t-url [url]\n\t\t\t\t\t\t\t\tAPI Endpoint\n\n' +
                                   '\t\t\t\t-qtd-url [qtde] [url]\n\t\t\t\t\t\t\t\tAPI Endpoint por quantidade\n\n' +
-                                  '\t\t\t\t-tenant-url [tenant] [url]\n\t\t\t\t\t\t\t\tIdentificação da Loja e API Endpoint\n\n' +
-                                  '\t\t\t\t-qtd-tenant-url [qtde] [tenant] [url]\n\t\t\t\t\t\t\t\tIdentificação da Loja e API Endpoint por quantidade';
-        appResize(420, 620);
+                                  '\t\t\t\t-tu ou -tenant-url [tenant] [url]\n\t\t\t\t\t\t\t\tIdentificação da Loja e API Endpoint\n\n' +
+                                  '\t\t\t\t-qtu ou -qtd-tenant-url [qtde] [tenant] [url]\n\t\t\t\t\t\t\t\tIdentificação da Loja e API Endpoint por quantidade';
+        appResize(420, 750);
         return false;
     }
 
@@ -31,14 +35,18 @@ $(document).ready(function () {
     db_stagelog.openConnection();
 
     switch (args[2]) {
-        case '-qtd': db_stagelog.selectRecents(args[3]); break;
-        case '-nsu': db_stagelog.selectNsu(args[3]); break;
-        case '-tenant': db_stagelog.selectTenant(args[3]); break;
-        case '-qtd-tenant': db_stagelog.selectTopTenant(args[3], args[4]); break;
+        case '-qtd': db_stagelog.selectRecents(args[3]); break; case '-q': db_stagelog.selectRecents(args[3]); break;
+        case '-nsu': db_stagelog.selectNsu(args[3]); break; case '-n': db_stagelog.selectNsu(args[3]); break;
+        case '-user': db_stagelog.selectUser(args[3]); break; case '-u': db_stagelog.selectUser(args[3]); break;
+        case '-user-url': db_stagelog.selectUserUrl(args[3], args[4]); break; case '-uu': db_stagelog.selectUserUrl(args[3], args[4]); break;
+        case '-qtd-user': db_stagelog.selectTopUser(args[3], args[4]); break; case '-qu': db_stagelog.selectTopUser(args[3], args[4]); break;
+        case '-qtd-user-url': db_stagelog.selectTopUserUrl(args[3], args[4], args[5]); break; case '-quu': db_stagelog.selectTopUserUrl(args[3], args[4], args[5]); break;
+        case '-tenant': db_stagelog.selectTenant(args[3]); break; case '-t': db_stagelog.selectTenant(args[3]); break;
+        case '-qtd-tenant': db_stagelog.selectTopTenant(args[3], args[4]); break; case '-qt': db_stagelog.selectTopTenant(args[3], args[4]); break;
         case '-url': db_stagelog.selectUrl(args[3]); break;
         case '-qtd-url': db_stagelog.selectTopUrl(args[3], args[4]); break;
-        case '-tenant-url': db_stagelog.selectTenantUrl(args[3], args[4]); break;
-        case '-qtd-tenant-url': db_stagelog.selectTopTenantUrl(args[3], args[4], args[5]); break;
+        case '-tenant-url': db_stagelog.selectTenantUrl(args[3], args[4]); break; case '-tu': db_stagelog.selectTenantUrl(args[3], args[4]); break;
+        case '-qtd-tenant-url': db_stagelog.selectTopTenantUrl(args[3], args[4], args[5]); break; case '-qtu': db_stagelog.selectTopTenantUrl(args[3], args[4], args[5]); break;
     }
 
     var index = 0;
