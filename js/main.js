@@ -1,3 +1,5 @@
+var sReq = [], sRes = [];
+
 function appResize(width, height) {
     var width = (width == undefined)? screen.availWidth - (screen.availWidth * 0.1) : width,
         height = (height == undefined)? screen.availHeight - (screen.availHeight * 0.2) : height,
@@ -52,13 +54,27 @@ $(document).ready(function () {
     var index = 0;
     while (!db_stagelog.record.eof) {//DateTime, TransactionNumber, Url, RequestContent, ResponseContent, TenantId, UserId, ClientId, TerminalCode
         index++;
+        sDate = String(db_stagelog.record('Datetime').value).split(' UTC')[0];
         sNsu = String(db_stagelog.record('TransactionNumber').value);
         sUrl = String(db_stagelog.record('Url').value).replace('http://', '').replace('https://', '').replace('unicostage.azurewebsites.net', '').replace('reshop-stage.linx.com.br', '').replace('localhost:52401', '');
-        sReq = JSON.stringify(db_stagelog.record('RequestContent').value); 
-        sRes = JSON.stringify(db_stagelog.record('ResponseContent').value);
+        sReq.push(db_stagelog.record('RequestContent').value);
+        sRes.push(db_stagelog.record('ResponseContent').value);
+        sReqRes = '"[" + sReq[' + index + '] + ", " + sRes[' + index + '] + "]"';
+        sTenant = String(db_stagelog.record('TenantId').value);
         sClient = String(db_stagelog.record('ClientId').value);
-        sFilename = filename.value +  index + ' ' + sUrl.replace('/api/', '').replace('fidelidade/', '').replace('ecommerce/', '').replace('statistics/', '');
-        //alert(sNsu + '\n' + sReq + '\n' + sRes + '\n' + sClient);
+        sUser = String(db_stagelog.record('UserId').value);
+        sTerminal = String(db_stagelog.record('TerminalCode').value);
+        sFilename = filename.value +  index + ' ' + sNsu + ' ' + sUrl.replace('/api/', '').replace('fidelidade/', '').replace('ecommerce/', '').replace('statistics/', '');
+        btnCopy = (sReq != undefined && sRes != undefined)? '<button class=\'btn btn-primary\' onClick=\'copy(' + sReqRes + ');\'>both</button>' : '';
+        btnCopyReq = (sReq != undefined)? '<button class=\'btn btn-primary\' onClick=\'copy(sReq[' + index + ']);\'>copy</button>' : '';
+        btnCopyRes = (sRes != undefined)? '<button class=\'btn btn-primary\' onClick=\'copy(sRes[' + index + ']);\'>copy</button>' : '';
+        btnSave = (sReq != undefined && sRes != undefined)? '<button class=\'btn btn-success\' onClick=\'saveJSONBoth("' + sFilename + '", sReq[' + index + '], sRes[' + index + ']);\'>both</button>' : '';
+        btnSaveReq = (sReq != undefined)? '<button class=\'btn btn-success\' onClick=\'saveJSONReq("' + sFilename + '", sReq[' + index + ']);\'>save</button>' : '';
+        btnSaveRes = (sRes != undefined)? '<button class=\'btn btn-success\' onClick=\'saveJSONRes("' + sFilename + '", sRes[' + index + ']);\'>save</button>' : '';
+        btnSaveAll = '<button class=\'btn btn-success\' onClick=\'\'>save all</button>';
+        btnClient = (sClient != '')? '<button class=\'btn btn-primary\' onClick=\'copy("' + sClient + '");\'>copy</button>' : '';
+        btnGroupStart = '<div class=\'btn-group btn-group-xs\' role=\'group\' >';
+        btnGroupEnd = '</div>';
         $('#datatable').DataTable({
             //destroy: true,
             retrieve: true,
@@ -71,15 +87,14 @@ $(document).ready(function () {
             info: false,
             searching: false
         }).row.add([
-            String(db_stagelog.record('Datetime')).split(' UTC')[0],
+            (sDate != undefined)? sDate : '',
             (sNsu != undefined)? sNsu : '',
-            sUrl, 
-            (sReq != undefined)? '<a class=\'label label-primary\' href=\'javascript:copy(' + sReq + ');\' target=\'_self\'>Copiar</a><a class=\'label label-default\' href=\'#\' target=\'_self\'>Salvar</a>' : '',
-            (sRes != undefined)? '<a class=\'label label-primary\' href=\'javascript:copy(' + sRes + ');\' target=\'_self\'>Copiar</a><a class=\'label label-default\' href=\'#\' target=\'_self\'>Salvar</a>' : '',
-            String(db_stagelog.record('TenantId')),
-            String(db_stagelog.record('UserId')),
-            (sClient != '')? '<a class=\'label label-primary\' href=\'javascript:copy("' + sClient + '");\' target=\'_self\'>Copiar</a>' : '',
-            String(db_stagelog.record('TerminalCode'))
+            (sUrl != undefined)? sUrl : '',
+            btnGroupStart + btnCopyReq + btnSaveReq + btnCopy + btnSave + btnCopyRes + btnSaveRes + btnGroupEnd,
+            (sTenant != undefined)? sTenant : '',
+            (sUser != undefined)? sUser : '',
+            btnGroupStart + btnClient + btnGroupEnd,
+            (sTerminal != undefined)? sTerminal : ''
         ]).draw(false);
 
         db_stagelog.record.MoveNext();

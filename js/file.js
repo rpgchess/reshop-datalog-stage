@@ -7,9 +7,26 @@ function readFile(filename) {
     return contents;
 }
 
-function saveFile(filename, contents) {
+function saveFile(filename, content) {
     var fso = new ActiveXObject("Scripting.FileSystemObject");
     var filesave = fso.CreateTextFile(filename, true);
-    filesave.WriteLine(contents);
+    filesave.WriteLine(content);
     filesave.close();
+}
+
+function saveJSON(filename, content) {
+    saveFile(filename + '.json', content);
+}
+
+function saveJSONReq(filename, content) {
+    saveJSON(filename + '.req', content);
+}
+
+function saveJSONRes(filename, content) {
+    saveJSON(filename + '.res', content);
+}
+
+function saveJSONBoth(filename, contentReq, contentRes) {
+    saveJSONReq(filename, contentReq);
+    saveJSONRes(filename, contentRes);
 }
