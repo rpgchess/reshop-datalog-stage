@@ -53,7 +53,6 @@ $(document).ready(function () {
 
     var index = 0;
     while (!db_stagelog.record.eof) {//DateTime, TransactionNumber, Url, RequestContent, ResponseContent, TenantId, UserId, ClientId, TerminalCode
-        index++;
         sDate = String(db_stagelog.record('Datetime').value).split(' UTC')[0];
         sNsu = String(db_stagelog.record('TransactionNumber').value);
         sUrl = String(db_stagelog.record('Url').value).replace('http://', '').replace('https://', '').replace('unicostage.azurewebsites.net', '').replace('reshop-stage.linx.com.br', '').replace('localhost:52401', '');
@@ -64,7 +63,7 @@ $(document).ready(function () {
         sClient = String(db_stagelog.record('ClientId').value);
         sUser = String(db_stagelog.record('UserId').value);
         sTerminal = String(db_stagelog.record('TerminalCode').value);
-        sFilename = filename.value +  index + ' ' + sNsu + ' ' + sUrl.replace('/api/', '').replace('fidelidade/', '').replace('ecommerce/', '').replace('statistics/', '');
+        sFilename = filename.value +  (index + 1) + '-' + sUrl.replace('/api/', '').replace('fidelidade/', '').replace('ecommerce/', '').replace('statistics/', '');
         btnCopy = (sReq != undefined && sRes != undefined)? '<button class=\'btn btn-primary\' onClick=\'copy(' + sReqRes + ');\'>both</button>' : '';
         btnCopyReq = (sReq != undefined)? '<button class=\'btn btn-primary\' onClick=\'copy(sReq[' + index + ']);\'>copy</button>' : '';
         btnCopyRes = (sRes != undefined)? '<button class=\'btn btn-primary\' onClick=\'copy(sRes[' + index + ']);\'>copy</button>' : '';
@@ -75,6 +74,7 @@ $(document).ready(function () {
         btnClient = (sClient != '')? '<button class=\'btn btn-primary\' onClick=\'copy("' + sClient + '");\'>copy</button>' : '';
         btnGroupStart = '<div class=\'btn-group btn-group-xs\' role=\'group\' >';
         btnGroupEnd = '</div>';
+        index++;
         $('#datatable').DataTable({
             //destroy: true,
             retrieve: true,
