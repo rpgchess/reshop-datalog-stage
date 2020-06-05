@@ -1,4 +1,5 @@
 function readFile(filename) {
+    alert(filename);
     var fso = new ActiveXObject("Scripting.FileSystemObject");
     var ForReading = 1;
     var fileread = fso.OpenTextFile(filename, ForReading);
@@ -8,6 +9,7 @@ function readFile(filename) {
 }
 
 function saveFile(filename, content) {
+    alert(filename + '\n' + content);
     var fso = new ActiveXObject("Scripting.FileSystemObject");
     var filesave = fso.CreateTextFile(filename, true);
     filesave.WriteLine(content);

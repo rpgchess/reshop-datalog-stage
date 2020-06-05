@@ -32,14 +32,16 @@ var db = {
         this.record.Open(query, this.connection);
         return query;
     },
-    select: function(fields, table, conditions, orderBy) {
-        var sQuey = "SELECT " + fields;
-            sQuey += " FROM " + table + "(NOLOCK)";
-            sQuey += (conditions != undefined)? " WHERE "+ conditions : "";
-            sQuey += (!orderBy != undefined)? " ORDER BY "+ orderBy + ' DESC': "";
+    select: function(qtde, fields, table, conditions, orderBy) {
+        var sQuery = "SELECT"
+            sQuery += (isExist(qtde))? " TOP " + qtde : "";
+            sQuery += " " + fields;
+            sQuery += " FROM " + table + "(NOLOCK)";
+            sQuery += (isExist(conditions))? " WHERE "+ conditions : "";
+            sQuery += (isExist(orderBy))? " ORDER BY "+ orderBy + ' DESC': "";
 
-        this.query(sQuey);
+        this.query(sQuery);
         this.record.MoveFirst();
-        return sQuey;
+        return sQuery;
     }
 }

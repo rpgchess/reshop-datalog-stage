@@ -1,4 +1,16 @@
-var sReq = [], sRes = [];
+var sReq = [], sRes = [], args = [];
+var table =  $('#datatable').DataTable({
+    //destroy: true,
+    retrieve: true,
+    autoWidth: false,
+    columnDefs: [
+        { width: "140px", "targets": 0 }
+    ],
+    paging: false,
+    ordering: false,
+    info: false,
+    searching: false
+});
 
 function appResize(width, height) {
     var width = (width == undefined)? screen.availWidth - (screen.availWidth * 0.1) : width,
@@ -10,30 +22,37 @@ function appResize(width, height) {
     window.moveTo(left, top);
 }
 
-$(document).ready(function () {
-    var args = app.commandLine.split(' ');
-    if (args[2] == undefined || args[3] == undefined) {
-        document.body.innerText = '\n\t\tParâmetros:\n\n' +
-                                  '\t\t\t\t-q ou -qtd [qtde]\n\t\t\t\t\t\t\t\tUltimos registros\n\n' +
-                                  '\t\t\t\t-n ou -nsu [nsu]\n\t\t\t\t\t\t\t\tNúmero da Transação\n\n' +
-                                  '\t\t\t\t-u ou -user [user]\n\t\t\t\t\t\t\t\tEmail do usuário\n\n' +
-                                  '\t\t\t\t-uu ou -user-url [user] [url]\n\t\t\t\t\t\t\t\tEmail do usuário e API Endpoint\n\n' +
-                                  '\t\t\t\t-qu ou -qtd-user [qtd] [user]\n\t\t\t\t\t\t\t\tEmail do usuário por quantidade\n\n' +
-                                  '\t\t\t\t-quu ou -qtd-user-url [qtd] [user] [url]\n\t\t\t\t\t\t\t\tEmail do usuário e API Endpoint por quantidade \n\n' +
-                                  '\t\t\t\t-t ou -tenant [tenant]\n\t\t\t\t\t\t\t\tIdentificação da Loja\n\n' +
-                                  '\t\t\t\t-qt ou -qtd-tenant [qtde] [tenant]\n\t\t\t\t\t\t\t\tIdentificação da Loja por quantidade\n\n' +
-                                  '\t\t\t\t-url [url]\n\t\t\t\t\t\t\t\tAPI Endpoint\n\n' +
-                                  '\t\t\t\t-qtd-url [qtde] [url]\n\t\t\t\t\t\t\t\tAPI Endpoint por quantidade\n\n' +
-                                  '\t\t\t\t-tu ou -tenant-url [tenant] [url]\n\t\t\t\t\t\t\t\tIdentificação da Loja e API Endpoint\n\n' +
-                                  '\t\t\t\t-qtu ou -qtd-tenant-url [qtde] [tenant] [url]\n\t\t\t\t\t\t\t\tIdentificação da Loja e API Endpoint por quantidade';
-        appResize(420, 750);
-        return false;
-    }
+function screenArgs() {
+    document.body.innerText = '\n\t\tParâmetros:\n\n' +
+    '\t\t\t\t-q ou -qtd [qtde]\n\t\t\t\t\t\t\t\tUltimos registros\n\n' +
+    '\t\t\t\t-n ou -nsu [nsu]\n\t\t\t\t\t\t\t\tNúmero da Transação\n\n' +
+    '\t\t\t\t-u ou -user [user]\n\t\t\t\t\t\t\t\tEmail do usuário\n\n' +
+    '\t\t\t\t-uu ou -user-url [user] [url]\n\t\t\t\t\t\t\t\tEmail do usuário e API Endpoint\n\n' +
+    '\t\t\t\t-qu ou -qtd-user [qtd] [user]\n\t\t\t\t\t\t\t\tEmail do usuário por quantidade\n\n' +
+    '\t\t\t\t-quu ou -qtd-user-url [qtd] [user] [url]\n\t\t\t\t\t\t\t\tEmail do usuário e API Endpoint por quantidade \n\n' +
+    '\t\t\t\t-t ou -tenant [tenant]\n\t\t\t\t\t\t\t\tIdentificação da Loja\n\n' +
+    '\t\t\t\t-qt ou -qtd-tenant [qtde] [tenant]\n\t\t\t\t\t\t\t\tIdentificação da Loja por quantidade\n\n' +
+    '\t\t\t\t-url [url]\n\t\t\t\t\t\t\t\tAPI Endpoint\n\n' +
+    '\t\t\t\t-qtd-url [qtde] [url]\n\t\t\t\t\t\t\t\tAPI Endpoint por quantidade\n\n' +
+    '\t\t\t\t-tu ou -tenant-url [tenant] [url]\n\t\t\t\t\t\t\t\tIdentificação da Loja e API Endpoint\n\n' +
+    '\t\t\t\t-qtu ou -qtd-tenant-url [qtde] [tenant] [url]\n\t\t\t\t\t\t\t\tIdentificação da Loja e API Endpoint por quantidade';
+    appResize(420, 750);
+}
 
-    appResize();
-    var filename = document.getElementById('filename');
-    filename.value = 'C:/Temp/';
+function removeStringsUrlToFilename(url) {
+    sTemp =  removeStrings(url, ['/api/', 'fidelidade/', 'ecommerce/', 'statistics/', 'posdata/', 'setup/']);
+    return sTemp.split('?')[0];
+}
 
+function removeStringsUrlToScreen(url) {
+    return removeStrings(url, ['http://', 'https://', 'unicostage.azurewebsites.net', 'reshop-stage.linx.com.br', 'localhost:52401']);
+}
+
+function concatFilepathString(index, filepath, filename, url) {
+    return filepath + index + '-' + filename + '-' + url;
+}
+
+function searchDB() {
     db_stagelog.openConnection();
 
     switch (args[2]) {
@@ -52,10 +71,11 @@ $(document).ready(function () {
     }
 
     var index = 0;
+    table.clear().draw();
     while (!db_stagelog.record.eof) {//DateTime, TransactionNumber, Url, RequestContent, ResponseContent, TenantId, UserId, ClientId, TerminalCode
         sDate = String(db_stagelog.record('Datetime').value).split(' UTC')[0];
         sNsu = String(db_stagelog.record('TransactionNumber').value);
-        sUrl = String(db_stagelog.record('Url').value).replace('http://', '').replace('https://', '').replace('unicostage.azurewebsites.net', '').replace('reshop-stage.linx.com.br', '').replace('localhost:52401', '');
+        sUrl = removeStringsUrlToScreen(String(db_stagelog.record('Url').value));
         sReq.push(db_stagelog.record('RequestContent').value);
         sRes.push(db_stagelog.record('ResponseContent').value);
         sReqRes = '"[" + sReq[' + index + '] + ", " + sRes[' + index + '] + "]"';
@@ -63,30 +83,19 @@ $(document).ready(function () {
         sClient = String(db_stagelog.record('ClientId').value);
         sUser = String(db_stagelog.record('UserId').value);
         sTerminal = String(db_stagelog.record('TerminalCode').value);
-        sFilename = filename.value +  (index + 1) + '-' + sUrl.replace('/api/', '').replace('fidelidade/', '').replace('ecommerce/', '').replace('statistics/', '');
-        btnCopy = (sReq != undefined && sRes != undefined)? '<button class=\'btn btn-primary\' onClick=\'copy(' + sReqRes + ');\'>both</button>' : '';
-        btnCopyReq = (sReq != undefined)? '<button class=\'btn btn-primary\' onClick=\'copy(sReq[' + index + ']);\'>copy</button>' : '';
-        btnCopyRes = (sRes != undefined)? '<button class=\'btn btn-primary\' onClick=\'copy(sRes[' + index + ']);\'>copy</button>' : '';
-        btnSave = (sReq != undefined && sRes != undefined)? '<button class=\'btn btn-success\' onClick=\'saveJSONBoth("' + sFilename + '", sReq[' + index + '], sRes[' + index + ']);\'>both</button>' : '';
-        btnSaveReq = (sReq != undefined)? '<button class=\'btn btn-success\' onClick=\'saveJSONReq("' + sFilename + '", sReq[' + index + ']);\'>save</button>' : '';
-        btnSaveRes = (sRes != undefined)? '<button class=\'btn btn-success\' onClick=\'saveJSONRes("' + sFilename + '", sRes[' + index + ']);\'>save</button>' : '';
+        sFilename = concatFilepathString(index + 1, getFilepath(), getFilename(), removeStringsUrlToFilename(sUrl));
+        btnCopy = (isExist(sReq) && isExist(sRes))? '<button class=\'btn btn-primary\' onClick=\'copy(' + sReqRes + ');\'>both</button>' : '';
+        btnCopyReq = (isExist(sReq))? '<button class=\'btn btn-primary\' onClick=\'copy(sReq[' + index + ']);\'>copy</button>' : '';
+        btnCopyRes = (isExist(sRes))? '<button class=\'btn btn-primary\' onClick=\'copy(sRes[' + index + ']);\'>copy</button>' : '';
+        btnSave = (isExist(sReq) && isExist(sRes))? '<button class=\'btn btn-success\' onClick=\'saveJSONBoth("' + sFilename + '", sReq[' + index + '], sRes[' + index + ']);\'>both</button>' : '';
+        btnSaveReq = (isExist(sReq))? '<button class=\'btn btn-success\' onClick=\'saveJSONReq("' + sFilename + '", sReq[' + index + ']);\'>save</button>' : '';
+        btnSaveRes = (isExist(sRes))? '<button class=\'btn btn-success\' onClick=\'saveJSONRes("' + sFilename + '", sRes[' + index + ']);\'>save</button>' : '';
         btnSaveAll = '<button class=\'btn btn-success\' onClick=\'\'>save all</button>';
-        btnClient = (sClient != '')? '<button class=\'btn btn-primary\' onClick=\'copy("' + sClient + '");\'>copy</button>' : '';
+        btnClient = (isExist(sClient))? '<button class=\'btn btn-primary\' onClick=\'copy("' + sClient + '");\'>copy</button>' : '';
         btnGroupStart = '<div class=\'btn-group btn-group-xs\' role=\'group\' >';
         btnGroupEnd = '</div>';
         index++;
-        $('#datatable').DataTable({
-            //destroy: true,
-            retrieve: true,
-            autoWidth: false,
-            columnDefs: [
-                { width: "140px", "targets": 0 }
-            ],
-            paging: false,
-            ordering: false,
-            info: false,
-            searching: false
-        }).row.add([
+        table.row.add([
             (sDate != undefined)? sDate : '',
             (sNsu != undefined)? sNsu : '',
             (sUrl != undefined)? sUrl : '',
@@ -101,4 +110,33 @@ $(document).ready(function () {
     }
 
     db_stagelog.closeConnection();
+}
+
+function getFilepath() {
+    return getElementValue('filepath');
+}
+
+function getFilename() {
+    return getElementValue('filename');
+}
+
+function setFilepath(path) {
+    setElementValue('filepath', path);
+}
+
+function setFilename(name) {
+    setElementValue('filename', name);
+}
+
+$(document).ready(function () {
+    args = app.commandLine.split(' ');
+    if (!isExist(args[2]) && !isExist(args[3])) {
+        screenArgs();
+        return false;
+    }
+
+    appResize();
+    setFilename('LinxPOS');
+    setFilepath('C:/Users/claudio.almeida/Desktop/');    
+    searchDB();
 });

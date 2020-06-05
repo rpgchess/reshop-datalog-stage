@@ -1,21 +1,21 @@
 <!DOCTYPE html>
-<html>
+<html lang="en-US">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta http-equiv="x-ua-compatible" content="ie=8">
+    <meta http-equiv="x-ua-compatible" content="ie=9">
     <title>RESHOP STAGE LOG</title>
     <HTA:APPLICATION
         ID="app"
         APPLICATIONNAME="DB"
-        BORDER="dialog"
-        BORDERSTYLE="static"
+        BORDER="thick"
+        BORDERSTYLE="normal"
         CAPTION="yes"
         NAVIGABLE="yes"
         ICON="icons/linx.ico"
         INNERBORDER="no"
-        MAXIMIZEBUTTON="no"
-        MINIMIZEBUTTON="no"
+        MAXIMIZEBUTTON="yes"
+        MINIMIZEBUTTON="yes"
         SCROLL="auto"
         SHOWINTASKBAR="yes"
         SINGLEINSTANCE="no"
@@ -31,18 +31,49 @@
 </head>
 <body>
     <div class="input-group input-group-sm">
-        <span class="input-group-addon" id="sizing-addon3">Caminho do Arquivo:</span>
+        <div class="input-group-btn">
+            <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown" aria-expanded="false">Path: <span class="caret"></span></button>
+            <ul class="dropdown-menu" role="menu">
+                <li><a href="javascript:setFilepath('C:/Users/claudio.almeida/Desktop/');">C:/Users/claudio.almeida/Desktop/</a></li>
+                <li><a href="javascript:setFilepath('C:/Users/claudio.almeida/Documents/');">C:/Users/claudio.almeida/Documents/</a></li>
+                <li><a href="javascript:setFilepath('C:/Users/claudio.almeida/Downloads/');">C:/Users/claudio.almeida/Downloads/</a></li>
+                <li><a href="javascript:setFilepath('C:/Users/claudio.almeida/Downloads/Tarefas/');">C:/Users/claudio.almeida/Downloads/Tarefas/</a></li>
+                <li><a href="javascript:setFilepath('C:/Users/claudio.almeida/Downloads/Tarefas/API/');">C:/Users/claudio.almeida/Downloads/Tarefas/API/</a></li>
+                <li><a href="javascript:setFilepath('C:/Users/claudio.almeida/Downloads/Tarefas/API/2020/');">C:/Users/claudio.almeida/Downloads/Tarefas/API/2020/</a></li>
+            </ul>
+        </div>
+        <input type="text" name="filepath" id="filepath" class="form-control" aria-describedby="sizing-addon3">
+        <div class="input-group-btn">
+            <!--
+            <button class="btn btn-success" onclick="">Request</button>
+            <button class="btn btn-success" onclick="">Both</button>
+            <button class="btn btn-success" onclick="">Response</button>
+            -->
+            <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown" aria-expanded="false">Name: <span class="caret"></span></button>
+            <ul class="dropdown-menu" role="menu">
+                <li><a href="javascript:setFilename('LinxPOS');">LinxPOS</a></li>
+                <li><a href="javascript:setFilename('Omni');">Omni</a></li>
+                <li><a href="javascript:setFilename('Mobile');">Mobile</a></li>
+                <li><a href="javascript:setFilename('Microvix');">Microvix</a></li>
+                <li><a href="javascript:setFilename('Millennium');">Millennium</a></li>
+                <li><a href="javascript:setFilename('Degust');">Degust</a></li>
+                <li><a href="javascript:setFilename('Farma');">Farma</a></li>
+            </ul>
+        </div><!-- /btn-group -->
         <input type="text" name="filename" id="filename" class="form-control" aria-describedby="sizing-addon3">
+        <span class="input-group-btn">
+            <button class="btn btn-primary" onclick="searchDB();">Refresh</button>
+        </span>
     </div>
     <table id="datatable" class="display compact" style="width:100%">
         <thead>
             <tr>
-                <th>Data</th>
+                <th>Date</th>
                 <th>NSU</th>
                 <th>URL</th>
-                <th>Requisição / Resposta</th>
+                <th>Request / Response</th>
                 <th>Tenant</th>
-                <th>Usuário</th>
+                <th>User</th>
                 <th>Client</th>
                 <th>Terminal</th>
             </tr>
