@@ -24,13 +24,13 @@ function isExist(value) {
 }
 
 function getElementValue(element) {
-    var obj = document.getElementById(element);
-    return obj.value;
+    obj = document.getElementById(element);
+    return String(obj.value);
 }
 
 function setElementValue(element, value) {
-    var obj = document.getElementById(element);
-    obj.value = value;
+    obj = document.getElementById(element);
+    obj.value = String(value);
 }
 
 function removeStrings(text, removes) {

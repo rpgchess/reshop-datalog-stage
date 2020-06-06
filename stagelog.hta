@@ -6,7 +6,7 @@
     <meta http-equiv="x-ua-compatible" content="ie=9">
     <title>RESHOP STAGE LOG</title>
     <HTA:APPLICATION
-        ID="app"
+        ID="reshop"
         APPLICATIONNAME="DB"
         BORDER="thick"
         BORDERSTYLE="normal"
@@ -34,12 +34,12 @@
         <div class="input-group-btn">
             <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown" aria-expanded="false">Path: <span class="caret"></span></button>
             <ul class="dropdown-menu" role="menu">
-                <li><a href="javascript:setFilepath('C:/Users/claudio.almeida/Desktop/');">C:/Users/claudio.almeida/Desktop/</a></li>
-                <li><a href="javascript:setFilepath('C:/Users/claudio.almeida/Documents/');">C:/Users/claudio.almeida/Documents/</a></li>
-                <li><a href="javascript:setFilepath('C:/Users/claudio.almeida/Downloads/');">C:/Users/claudio.almeida/Downloads/</a></li>
-                <li><a href="javascript:setFilepath('C:/Users/claudio.almeida/Downloads/Tarefas/');">C:/Users/claudio.almeida/Downloads/Tarefas/</a></li>
-                <li><a href="javascript:setFilepath('C:/Users/claudio.almeida/Downloads/Tarefas/API/');">C:/Users/claudio.almeida/Downloads/Tarefas/API/</a></li>
-                <li><a href="javascript:setFilepath('C:/Users/claudio.almeida/Downloads/Tarefas/API/2020/');">C:/Users/claudio.almeida/Downloads/Tarefas/API/2020/</a></li>
+                <li><a href="javascript:setFilepath(system.env.userProfile + '/Desktop/');">Desktop</a></li>
+                <li><a href="javascript:setFilepath(system.env.userProfile + '/Documents/');">Documents</a></li>
+                <li><a href="javascript:setFilepath(system.env.userProfile + '/Downloads/');">Downloads</a></li>
+                <li><a href="javascript:setFilepath(system.env.userProfile + '/Music/');">Music</a></li>
+                <li><a href="javascript:setFilepath(system.env.userProfile + '/Pictures/');">Pictures</a></li>
+                <li><a href="javascript:setFilepath(system.env.userProfile + '/Videos/');">Videos</a></li>
             </ul>
         </div>
         <input type="text" name="filepath" id="filepath" class="form-control" aria-describedby="sizing-addon3">
@@ -87,8 +87,10 @@
     <script src="https://stackpath.bootstrapcdn.com/bootstrap/3.3.2/js/bootstrap.min.js"></script>
     <script src="https://cdn.datatables.net/1.10.19/js/jquery.dataTables.min.js"></script>
     <script src="js/utils.js"></script>
+    <script src="js/system.js"></script>
     <script src="js/file.js"></script>
     <script src="js/db.js"></script>
+    <script src="js/config.js"></script>
     <script src="config/db-stagelog.config"></script>
     <script src="js/main.js"></script>
 </body>

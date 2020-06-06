@@ -1,3 +1,7 @@
+var app = {
+    
+}
+
 var sReq = [], sRes = [], args = [];
 var table =  $('#datatable').DataTable({
     //destroy: true,
@@ -52,6 +56,18 @@ function concatFilepathString(index, filepath, filename, url) {
     return filepath + index + '-' + filename + '-' + url;
 }
 
+function makeStringAndSaveJSON(index, url, request) {
+    sFilename = concatFilepathString(index + 1, getFilepath(), getFilename(), removeStringsUrlToFilename(url));
+    switch (request) {
+        case 'req': file.saveJSON(sFilename + '.req', sReq[index]); break;
+        case 'res': file.saveJSON(sFilename + '.res', sRes[index]); break;
+        case 'both':
+            file.saveJSON(sFilename + '.req', sReq[index]);
+            file.saveJSON(sFilename + '.res', sRes[index]);
+            break;
+    }
+}
+
 function searchDB() {
     db_stagelog.openConnection();
 
@@ -71,6 +87,8 @@ function searchDB() {
     }
 
     var index = 0;
+    sReq = [];
+    sRes = [];
     table.clear().draw();
     while (!db_stagelog.record.eof) {//DateTime, TransactionNumber, Url, RequestContent, ResponseContent, TenantId, UserId, ClientId, TerminalCode
         sDate = String(db_stagelog.record('Datetime').value).split(' UTC')[0];
@@ -83,13 +101,12 @@ function searchDB() {
         sClient = String(db_stagelog.record('ClientId').value);
         sUser = String(db_stagelog.record('UserId').value);
         sTerminal = String(db_stagelog.record('TerminalCode').value);
-        sFilename = concatFilepathString(index + 1, getFilepath(), getFilename(), removeStringsUrlToFilename(sUrl));
         btnCopy = (isExist(sReq) && isExist(sRes))? '<button class=\'btn btn-primary\' onClick=\'copy(' + sReqRes + ');\'>both</button>' : '';
         btnCopyReq = (isExist(sReq))? '<button class=\'btn btn-primary\' onClick=\'copy(sReq[' + index + ']);\'>copy</button>' : '';
         btnCopyRes = (isExist(sRes))? '<button class=\'btn btn-primary\' onClick=\'copy(sRes[' + index + ']);\'>copy</button>' : '';
-        btnSave = (isExist(sReq) && isExist(sRes))? '<button class=\'btn btn-success\' onClick=\'saveJSONBoth("' + sFilename + '", sReq[' + index + '], sRes[' + index + ']);\'>both</button>' : '';
-        btnSaveReq = (isExist(sReq))? '<button class=\'btn btn-success\' onClick=\'saveJSONReq("' + sFilename + '", sReq[' + index + ']);\'>save</button>' : '';
-        btnSaveRes = (isExist(sRes))? '<button class=\'btn btn-success\' onClick=\'saveJSONRes("' + sFilename + '", sRes[' + index + ']);\'>save</button>' : '';
+        btnSave = (isExist(sReq) && isExist(sRes))? '<button class=\'btn btn-success\' onClick=\'makeStringAndSaveJSON(' + index + ', "' + sUrl + '", "both");\'>both</button>' : '';
+        btnSaveReq = (isExist(sReq))? '<button class=\'btn btn-success\' onClick=\'makeStringAndSaveJSON(' + index + ', "' + sUrl + '", "req");\'>save</button>' : '';
+        btnSaveRes = (isExist(sRes))? '<button class=\'btn btn-success\' onClick=\'makeStringAndSaveJSON(' + index + ', "' + sUrl + '", "res");\'>save</button>' : '';
         btnSaveAll = '<button class=\'btn btn-success\' onClick=\'\'>save all</button>';
         btnClient = (isExist(sClient))? '<button class=\'btn btn-primary\' onClick=\'copy("' + sClient + '");\'>copy</button>' : '';
         btnGroupStart = '<div class=\'btn-group btn-group-xs\' role=\'group\' >';
@@ -129,7 +146,7 @@ function setFilename(name) {
 }
 
 $(document).ready(function () {
-    args = app.commandLine.split(' ');
+    args = reshop.commandLine.split(' ');
     if (!isExist(args[2]) && !isExist(args[3])) {
         screenArgs();
         return false;

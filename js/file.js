@@ -1,34 +1,96 @@
-function readFile(filename) {
-    alert(filename);
-    var fso = new ActiveXObject("Scripting.FileSystemObject");
-    var ForReading = 1;
-    var fileread = fso.OpenTextFile(filename, ForReading);
-    var contents = fileread.ReadAll();
-    fileread.close();
-    return contents;
+var file = {
+    enum: {
+        //IO Mode
+        ForReading: 1,
+        ForWriting: 2,
+        ForAppending: 8,
+        //Format
+        TristateUseDefault: -2,
+        TristateTrue: -1,
+        TristateFalse: 0
+    },
+    fs: {},
+    create: function() {
+        this.fs = new ActiveXObject("Scripting.FileSystemObject");
+    },
+    read: function(filename) {
+        alert(filename); //return false;
+        var file = this.fs.OpenTextFile(filename, this.enum.ForReading);
+        var contents = file.ReadAll();
+        file.close();
+        return contents;
+    },
+    save: function(filename, content) {
+        alert(filename + '\n' + content); //return false;
+        var file = this.fs.CreateTextFile(filename, true);
+        file.WriteLine(content);
+        file.close();
+    },
+    saveExt: function(filename, ext, content) {
+        this.save(filename + ext, content);
+    },
+    saveJSON: function(filename, content) {
+        this.saveExt(filename, '.json', content);
+    }
 }
 
-function saveFile(filename, content) {
-    alert(filename + '\n' + content);
-    var fso = new ActiveXObject("Scripting.FileSystemObject");
-    var filesave = fso.CreateTextFile(filename, true);
-    filesave.WriteLine(content);
-    filesave.close();
+file.create();
+/*
+Scripting.Dictionary
+Scripting.FileSystemObject = {
+    Drivers: [],
+    Folders: [],
+    Files: [],
+    BuildPath(),
+    CopyFile(filename: string, path: string, ???: booleano),
+    CopyFolder(),
+    CreateFolder(),
+    CreateTextFile(filename: string, overwrite: boolean),
+    DeleteFile(filename: string, ???: booleano),
+    DeleteFolder(),
+    DriveExists(),
+    Drives(),
+    FileExists(),
+    FolderExists(),
+    GetAbsolutePathName(),
+    GetBaseName(),
+    GetDrive(driver: string): Drive,
+    GetDriveName(),
+    GetExtensionName(),
+    GetFile(filename: string): File,
+    GetFileName(),
+    GetFolder(search: string): Folder,
+    GetParentFolderName(),
+    GetSpecialFolder(),
+    GetTempName(),
+    MoveFile(),
+    MoveFolder(),
+    OpenTextFile(filename: string, iomode: number, create: boolean, format: number)
 }
-
-function saveJSON(filename, content) {
-    saveFile(filename + '.json', content);
+Folder = {
+    Files: [],
 }
-
-function saveJSONReq(filename, content) {
-    saveJSON(filename + '.req', content);
+TextStream = {
+    ReadAll(),
+    Write(content: string),
+    WriteLine(content: string),
+    Close()
 }
-
-function saveJSONRes(filename, content) {
-    saveJSON(filename + '.res', content);
+File = {
+    Name,
+    Size,
+    DateCreated,
+    DateLastAccessed,
+    DateLastModified,
+    ShortName
 }
-
-function saveJSONBoth(filename, contentReq, contentRes) {
-    saveJSONReq(filename, contentReq);
-    saveJSONRes(filename, contentRes);
+Drive = {
+    IsReady(),
+    DriveLetter,
+    VolumeName,
+    TotalSize,
+    FreeSpace,
+    SerialNumber,
+    DriveType
 }
+*/

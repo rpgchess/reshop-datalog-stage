@@ -45,3 +45,26 @@ var db = {
         return sQuery;
     }
 }
+/*
+ADODB.Connection
+ADODB.Recordset = {
+    Fields = [],
+    Properties = [],
+    Parameters = [],
+    Errors = []
+}
+ADODB.Stream
+*CursorTypeEnum Constants*
+-1      adOpenUnspecified
+0       adOpenForwardOnly
+1       adOpenKeyset
+2       adOpenDynamic
+3       adOpenStatic
+
+*LockTypeEnum Constants*
+-1      adLockUnspecified
+1       adLockReadOnly
+2       adLockPessimistic
+3       adLockOptimistic
+4       adLockBatchOptimistic
+*/
