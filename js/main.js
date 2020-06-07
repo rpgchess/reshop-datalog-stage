@@ -154,6 +154,6 @@ $(document).ready(function () {
 
     appResize();
     setFilename('LinxPOS');
-    setFilepath('C:/Users/claudio.almeida/Desktop/');    
+    setFilepath('C:\\Users\\claudio.almeida\\Desktop\\');
     searchDB();
 });

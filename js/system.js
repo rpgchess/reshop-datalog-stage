@@ -64,7 +64,10 @@ var system = {
             + this.env.userProfile + '\n'
             + this.env.winDir
         );
-    }
+    },
+    run: function(application) {
+        this.ws.Run(application);
+    },
 }
 
 system.create();

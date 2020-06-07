@@ -34,16 +34,17 @@
         <div class="input-group-btn">
             <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown" aria-expanded="false">Path: <span class="caret"></span></button>
             <ul class="dropdown-menu" role="menu">
-                <li><a href="javascript:setFilepath(system.env.userProfile + '/Desktop/');">Desktop</a></li>
-                <li><a href="javascript:setFilepath(system.env.userProfile + '/Documents/');">Documents</a></li>
-                <li><a href="javascript:setFilepath(system.env.userProfile + '/Downloads/');">Downloads</a></li>
-                <li><a href="javascript:setFilepath(system.env.userProfile + '/Music/');">Music</a></li>
-                <li><a href="javascript:setFilepath(system.env.userProfile + '/Pictures/');">Pictures</a></li>
-                <li><a href="javascript:setFilepath(system.env.userProfile + '/Videos/');">Videos</a></li>
+                <li><a href="javascript:setFilepath(system.env.userProfile + '\\Desktop\\');">Desktop</a></li>
+                <li><a href="javascript:setFilepath(system.env.userProfile + '\\Documents\\');">Documents</a></li>
+                <li><a href="javascript:setFilepath(system.env.userProfile + '\\Downloads\\');">Downloads</a></li>
+                <li><a href="javascript:setFilepath(system.env.userProfile + '\\Music\\');">Music</a></li>
+                <li><a href="javascript:setFilepath(system.env.userProfile + '\\Pictures\\');">Pictures</a></li>
+                <li><a href="javascript:setFilepath(system.env.userProfile + '\\Videos\\');">Videos</a></li>
             </ul>
         </div>
         <input type="text" name="filepath" id="filepath" class="form-control" aria-describedby="sizing-addon3">
         <div class="input-group-btn">
+            <button class="btn btn-warning" onclick="system.run(getFilepath());">Go</button>
             <!--
             <button class="btn btn-success" onclick="">Request</button>
             <button class="btn btn-success" onclick="">Both</button>

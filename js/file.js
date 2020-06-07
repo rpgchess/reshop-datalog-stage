@@ -14,14 +14,14 @@ var file = {
         this.fs = new ActiveXObject("Scripting.FileSystemObject");
     },
     read: function(filename) {
-        alert(filename); //return false;
+        //alert(filename); //return false;
         var file = this.fs.OpenTextFile(filename, this.enum.ForReading);
         var contents = file.ReadAll();
         file.close();
         return contents;
     },
     save: function(filename, content) {
-        alert(filename + '\n' + content); //return false;
+        //alert(filename + '\n' + content); //return false;
         var file = this.fs.CreateTextFile(filename, true);
         file.WriteLine(content);
         file.close();
