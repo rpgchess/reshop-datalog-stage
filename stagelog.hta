@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en-US">
+<html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -30,59 +30,65 @@
     <link rel="stylesheet" href="css/style.css">
 </head>
 <body>
-    <div class="input-group input-group-sm">
-        <div class="input-group-btn">
-            <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown" aria-expanded="false">Path: <span class="caret"></span></button>
-            <ul class="dropdown-menu" role="menu">
-                <li><a href="javascript:setFilepath(system.env.userProfile + '\\Desktop\\');">Desktop</a></li>
-                <li><a href="javascript:setFilepath(system.env.userProfile + '\\Documents\\');">Documents</a></li>
-                <li><a href="javascript:setFilepath(system.env.userProfile + '\\Downloads\\');">Downloads</a></li>
-                <li><a href="javascript:setFilepath(system.env.userProfile + '\\Music\\');">Music</a></li>
-                <li><a href="javascript:setFilepath(system.env.userProfile + '\\Pictures\\');">Pictures</a></li>
-                <li><a href="javascript:setFilepath(system.env.userProfile + '\\Videos\\');">Videos</a></li>
-            </ul>
+    <div class="container-fluid">
+        <div class="row">
+            <div class="input-group input-group-sm">
+                <div class="input-group-btn">
+                    <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown" aria-expanded="false">Path: <span class="caret"></span></button>
+                    <ul class="dropdown-menu" role="menu">
+                        <li><a href="javascript:setFilepath(system.env.userProfile + '\\Desktop\\');">Desktop</a></li>
+                        <li><a href="javascript:setFilepath(system.env.userProfile + '\\Documents\\');">Documents</a></li>
+                        <li><a href="javascript:setFilepath(system.env.userProfile + '\\Downloads\\');">Downloads</a></li>
+                        <li><a href="javascript:setFilepath(system.env.userProfile + '\\Music\\');">Music</a></li>
+                        <li><a href="javascript:setFilepath(system.env.userProfile + '\\Pictures\\');">Pictures</a></li>
+                        <li><a href="javascript:setFilepath(system.env.userProfile + '\\Videos\\');">Videos</a></li>
+                    </ul>
+                </div>
+                <input type="text" name="filepath" id="filepath" class="form-control" aria-describedby="sizing-addon3">
+                <div class="input-group-btn">
+                    <button class="btn btn-warning" onclick="system.run(getFilepath());">Go</button>
+                    <!--
+                    <button class="btn btn-success" onclick="">Request</button>
+                    <button class="btn btn-success" onclick="">Both</button>
+                    <button class="btn btn-success" onclick="">Response</button>
+                    -->
+                    <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown" aria-expanded="false">Name: <span class="caret"></span></button>
+                    <ul class="dropdown-menu" role="menu">
+                        <li><a href="javascript:setFilename('LinxPOS');">LinxPOS</a></li>
+                        <li><a href="javascript:setFilename('Omni');">Omni</a></li>
+                        <li><a href="javascript:setFilename('Mobile');">Mobile</a></li>
+                        <li><a href="javascript:setFilename('Microvix');">Microvix</a></li>
+                        <li><a href="javascript:setFilename('Millennium');">Millennium</a></li>
+                        <li><a href="javascript:setFilename('Degust');">Degust</a></li>
+                        <li><a href="javascript:setFilename('Farma');">Farma</a></li>
+                    </ul>
+                </div><!-- /btn-group -->
+                <input type="text" name="filename" id="filename" class="form-control" aria-describedby="sizing-addon3">
+                <span class="input-group-btn">
+                    <button class="btn btn-primary" onclick="searchDB();">Refresh</button>
+                </span>
+            </div>
         </div>
-        <input type="text" name="filepath" id="filepath" class="form-control" aria-describedby="sizing-addon3">
-        <div class="input-group-btn">
-            <button class="btn btn-warning" onclick="system.run(getFilepath());">Go</button>
-            <!--
-            <button class="btn btn-success" onclick="">Request</button>
-            <button class="btn btn-success" onclick="">Both</button>
-            <button class="btn btn-success" onclick="">Response</button>
-            -->
-            <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown" aria-expanded="false">Name: <span class="caret"></span></button>
-            <ul class="dropdown-menu" role="menu">
-                <li><a href="javascript:setFilename('LinxPOS');">LinxPOS</a></li>
-                <li><a href="javascript:setFilename('Omni');">Omni</a></li>
-                <li><a href="javascript:setFilename('Mobile');">Mobile</a></li>
-                <li><a href="javascript:setFilename('Microvix');">Microvix</a></li>
-                <li><a href="javascript:setFilename('Millennium');">Millennium</a></li>
-                <li><a href="javascript:setFilename('Degust');">Degust</a></li>
-                <li><a href="javascript:setFilename('Farma');">Farma</a></li>
-            </ul>
-        </div><!-- /btn-group -->
-        <input type="text" name="filename" id="filename" class="form-control" aria-describedby="sizing-addon3">
-        <span class="input-group-btn">
-            <button class="btn btn-primary" onclick="searchDB();">Refresh</button>
-        </span>
+        <div class="row">
+            <table id="datatable" class="display compact" style="width:100%">
+                <thead>
+                    <tr>
+                        <th>Date</th>
+                        <th>NSU</th>
+                        <th>URL</th>
+                        <th>Request / Response</th>
+                        <th>Tenant</th>
+                        <th>User</th>
+                        <th>Client</th>
+                        <th>Terminal</th>
+                    </tr>
+                </thead>
+                <tbody>
+        
+                </tbody>
+            </table>
+        </div>
     </div>
-    <table id="datatable" class="display compact" style="width:100%">
-        <thead>
-            <tr>
-                <th>Date</th>
-                <th>NSU</th>
-                <th>URL</th>
-                <th>Request / Response</th>
-                <th>Tenant</th>
-                <th>User</th>
-                <th>Client</th>
-                <th>Terminal</th>
-            </tr>
-        </thead>
-        <tbody>
-
-        </tbody>
-    </table>
     <!-- Dependência jQuery and Bootstrap -->
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.2/jquery.min.js"></script>
     <script src="https://stackpath.bootstrapcdn.com/bootstrap/3.3.2/js/bootstrap.min.js"></script>

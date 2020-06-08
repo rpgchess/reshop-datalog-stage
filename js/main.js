@@ -2,7 +2,20 @@ var app = {
     
 }
 
-var sReq = [], sRes = [], args = [];
+var rows = [];
+var cols = {
+    DATE: 0,
+    NSU: 1,
+    URL: 2,
+    REQUEST: 3,
+    RESPONSE: 4,
+    TENANT: 5,
+    USER: 6,
+    GUID: 7,
+    TERMINAL: 8
+}
+
+var args = [];
 var table =  $('#datatable').DataTable({
     //destroy: true,
     retrieve: true,
@@ -56,15 +69,28 @@ function concatFilepathString(index, filepath, filename, url) {
     return filepath + index + '-' + filename + '-' + url;
 }
 
-function makeStringAndSaveJSON(index, url, request) {
-    sFilename = concatFilepathString(index + 1, getFilepath(), getFilename(), removeStringsUrlToFilename(url));
-    switch (request) {
-        case 'req': file.saveJSON(sFilename + '.req', sReq[index]); break;
-        case 'res': file.saveJSON(sFilename + '.res', sRes[index]); break;
+function makeStringAndSaveJSON(index, requestType) {
+    sFilename = concatFilepathString(index + 1, getFilepath(), getFilename(), removeStringsUrlToFilename(rows[index][cols.URL]));
+    switch (requestType) {
+        case 'req': file.saveJSON(sFilename + '.req', rows[index][cols.REQUEST]); break;
+        case 'res': file.saveJSON(sFilename + '.res', rows[index][cols.RESPONSE]); break;
         case 'both':
-            file.saveJSON(sFilename + '.req', sReq[index]);
-            file.saveJSON(sFilename + '.res', sRes[index]);
+            file.saveJSON(sFilename + '.req', rows[index][cols.REQUEST]);
+            file.saveJSON(sFilename + '.res', rows[index][cols.RESPONSE]);
             break;
+    }
+}
+
+function makeButtonHTML(name, color, eventClick) {
+    return '<button class="btn btn-'+ color +'" onClick="'+ eventClick +'">' + name + '</button>';
+}
+
+function copyType(index, type) {
+    switch (type) {
+        case 'guid': copy(rows[index][cols.GUID]); break;
+        case 'req': copy(rows[index][cols.REQUEST]); break;
+        case 'res': copy(rows[index][cols.RESPONSE]); break;
+        case 'both': copy('[' + rows[index][cols.REQUEST] + '], [' + rows[index][cols.RESPONSE] + ']'); break;
     }
 }
 
@@ -86,47 +112,41 @@ function searchDB() {
         case '-qtd-tenant-url': db_stagelog.selectTopTenantUrl(args[3], args[4], args[5]); break; case '-qtu': db_stagelog.selectTopTenantUrl(args[3], args[4], args[5]); break;
     }
 
-    var index = 0;
-    sReq = [];
-    sRes = [];
     table.clear().draw();
-    while (!db_stagelog.record.eof) {//DateTime, TransactionNumber, Url, RequestContent, ResponseContent, TenantId, UserId, ClientId, TerminalCode
-        sDate = String(db_stagelog.record('Datetime').value).split(' UTC')[0];
-        sNsu = String(db_stagelog.record('TransactionNumber').value);
-        sUrl = removeStringsUrlToScreen(String(db_stagelog.record('Url').value));
-        sReq.push(db_stagelog.record('RequestContent').value);
-        sRes.push(db_stagelog.record('ResponseContent').value);
-        sReqRes = '"[" + sReq[' + index + '] + ", " + sRes[' + index + '] + "]"';
-        sTenant = String(db_stagelog.record('TenantId').value);
-        sClient = String(db_stagelog.record('ClientId').value);
-        sUser = String(db_stagelog.record('UserId').value);
-        sTerminal = String(db_stagelog.record('TerminalCode').value);
-        btnCopy = (isExist(sReq) && isExist(sRes))? '<button class=\'btn btn-primary\' onClick=\'copy(' + sReqRes + ');\'>both</button>' : '';
-        btnCopyReq = (isExist(sReq))? '<button class=\'btn btn-primary\' onClick=\'copy(sReq[' + index + ']);\'>copy</button>' : '';
-        btnCopyRes = (isExist(sRes))? '<button class=\'btn btn-primary\' onClick=\'copy(sRes[' + index + ']);\'>copy</button>' : '';
-        btnSave = (isExist(sReq) && isExist(sRes))? '<button class=\'btn btn-success\' onClick=\'makeStringAndSaveJSON(' + index + ', "' + sUrl + '", "both");\'>both</button>' : '';
-        btnSaveReq = (isExist(sReq))? '<button class=\'btn btn-success\' onClick=\'makeStringAndSaveJSON(' + index + ', "' + sUrl + '", "req");\'>save</button>' : '';
-        btnSaveRes = (isExist(sRes))? '<button class=\'btn btn-success\' onClick=\'makeStringAndSaveJSON(' + index + ', "' + sUrl + '", "res");\'>save</button>' : '';
-        btnSaveAll = '<button class=\'btn btn-success\' onClick=\'\'>save all</button>';
-        btnClient = (isExist(sClient))? '<button class=\'btn btn-primary\' onClick=\'copy("' + sClient + '");\'>copy</button>' : '';
-        btnGroupStart = '<div class=\'btn-group btn-group-xs\' role=\'group\' >';
-        btnGroupEnd = '</div>';
-        index++;
-        table.row.add([
-            (sDate != undefined)? sDate : '',
-            (sNsu != undefined)? sNsu : '',
-            (sUrl != undefined)? sUrl : '',
-            btnGroupStart + btnCopyReq + btnSaveReq + btnCopy + btnSave + btnCopyRes + btnSaveRes + btnGroupEnd,
-            (sTenant != undefined)? sTenant : '',
-            (sUser != undefined)? sUser : '',
-            btnGroupStart + btnClient + btnGroupEnd,
-            (sTerminal != undefined)? sTerminal : ''
-        ]).draw(false);
 
-        db_stagelog.record.MoveNext();
+    if (!db_stagelog.record.EOF) {
+        rows = db_stagelog.record.GetString(2).trim().split('\r');
     }
 
     db_stagelog.closeConnection();
+
+    rows.forEach(function (row, index, rows) {
+        rows[index] = row.split('\t');
+        rows[index][cols.URL] = removeStringsUrlToScreen(rows[index][cols.URL]);
+
+        btnGroupStart = '<div class=\'btn-group btn-group-xs\' role=\'group\' >';
+        btnCopy = makeButtonHTML('copy', 'primary', 'copyType(' + index + ', \'both\');');
+        btnCopyReq = makeButtonHTML('copy', 'primary', 'copyType(' + index + ', \'req\');');
+        btnCopyRes = makeButtonHTML('copy', 'primary', 'copyType(' + index + ', \'res\');');
+        btnSave = makeButtonHTML('both', 'success', 'makeStringAndSaveJSON(' + index + ', \'both\');');
+        btnSaveReq = makeButtonHTML('save', 'success', 'makeStringAndSaveJSON(' + index + ', \'req\');');
+        btnSaveRes = makeButtonHTML('save', 'success', 'makeStringAndSaveJSON(' + index + ', \'res\');');
+        btnSaveAll = makeButtonHTML('save', 'success', '');
+        btnClient =  makeButtonHTML('copy', 'primary', 'copyType(' + index + ', \'guid\');');
+        btnGroupEnd = '</div>';
+
+        table.row.add([
+            (isExist(rows[index][cols.DATE]))? rows[index][cols.DATE] : '',
+            (isExist(rows[index][cols.NSU]))? rows[index][cols.NSU] : '',
+            (isExist(rows[index][cols.URL]))? rows[index][cols.URL] : '',
+            (isExist(rows[index][cols.REQUEST]) && 
+             isExist(rows[index][cols.RESPONSE]))? btnGroupStart + btnCopyReq + btnSaveReq + btnCopy + btnSave + btnCopyRes + btnSaveRes + btnGroupEnd : '',
+            (isExist(rows[index][cols.TENANT]))? rows[index][cols.TENANT] : '',
+            (isExist(rows[index][cols.USER]))? rows[index][cols.USER] : '',
+            (isExist(rows[index][cols.GUID]))? btnGroupStart + btnClient + btnGroupEnd : '',
+            (isExist(rows[index][cols.TERMINAL]))? rows[index][cols.TERMINAL] : ''
+        ]).draw(false);
+    });
 }
 
 function getFilepath() {

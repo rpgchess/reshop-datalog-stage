@@ -21,7 +21,7 @@ var file = {
         return contents;
     },
     save: function(filename, content) {
-        //alert(filename + '\n' + content); //return false;
+        //alert(filename + '\n\n' + content); //return false;
         var file = this.fs.CreateTextFile(filename, true);
         file.WriteLine(content);
         file.close();
