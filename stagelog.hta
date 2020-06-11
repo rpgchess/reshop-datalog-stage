@@ -8,15 +8,15 @@
     <HTA:APPLICATION
         ID="reshop"
         APPLICATIONNAME="DB"
-        BORDER="thick"
+        BORDER="thin"
         BORDERSTYLE="normal"
         CAPTION="yes"
         NAVIGABLE="yes"
         ICON="icons/linx.ico"
         INNERBORDER="no"
-        MAXIMIZEBUTTON="yes"
+        MAXIMIZEBUTTON="no"
         MINIMIZEBUTTON="yes"
-        SCROLL="auto"
+        SCROLL="no"
         SHOWINTASKBAR="yes"
         SINGLEINSTANCE="no"
         SYSMENU="yes"
@@ -43,16 +43,11 @@
                         <li><a href="javascript:setFilepath(system.env.userProfile + '\\Pictures\\');">Pictures</a></li>
                         <li><a href="javascript:setFilepath(system.env.userProfile + '\\Videos\\');">Videos</a></li>
                     </ul>
+                    <button class="btn btn-warning" onclick="system.run(getFilepath());">Go</button>
                 </div>
                 <input type="text" name="filepath" id="filepath" class="form-control" aria-describedby="sizing-addon3">
                 <div class="input-group-btn">
-                    <button class="btn btn-warning" onclick="system.run(getFilepath());">Go</button>
-                    <!--
-                    <button class="btn btn-success" onclick="">Request</button>
-                    <button class="btn btn-success" onclick="">Both</button>
-                    <button class="btn btn-success" onclick="">Response</button>
-                    -->
-                    <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown" aria-expanded="false">Name: <span class="caret"></span></button>
+                    <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown" aria-expanded="false">Prefix: <span class="caret"></span></button>
                     <ul class="dropdown-menu" role="menu">
                         <li><a href="javascript:setFilename('LinxPOS');">LinxPOS</a></li>
                         <li><a href="javascript:setFilename('Omni');">Omni</a></li>
@@ -62,12 +57,66 @@
                         <li><a href="javascript:setFilename('Degust');">Degust</a></li>
                         <li><a href="javascript:setFilename('Farma');">Farma</a></li>
                     </ul>
-                </div><!-- /btn-group -->
+                </div>
                 <input type="text" name="filename" id="filename" class="form-control" aria-describedby="sizing-addon3">
-                <span class="input-group-btn">
-                    <button class="btn btn-primary" onclick="searchDB();">Refresh</button>
-                </span>
+                <div class="input-group-btn">
+                    <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown" aria-expanded="false">Editor: <span class="caret"></span></button>
+                    <ul class="dropdown-menu" role="menu">
+                        <li><a href="javascript:setEditor(system.env.winDir + '\\notepad.exe');">Notepad</a></li>
+                        <li><a href="javascript:setEditor('C:\\Program Files\\Notepad++\\notepad++.exe');">Notepad++</a></li>
+                    </ul>
+                </div>
+                <input type="text" name="editor" id="editor" class="form-control" aria-describedby="sizing-addon3"> 
+                <!--
+                <div class="input-group-btn">
+                    <span class="input-group-addon">Name:</span>
+                </div>
+                <input type="text" name="name" id="name" class="form-control" aria-describedby="sizing-addon3">
+                <div class="input-group-btn">
+                    <span class="input-group-addon">Sulffix:</span>
+                </div>
+                <input type="text" name="suffix" id="suffix" class="form-control" aria-describedby="sizing-addon3">
+                -->
             </div>
+        </div>
+        <div class="row">
+        <!--
+            <div class="input-group input-group-sm">
+                <div class="input-group-btn">
+                    <span class="input-group-addon">Qtde: <strong>[top]</strong></span>
+                    <input type="text" id="qtde:" class="form-control">
+                </div>
+                <div class="input-group-btn">
+                    <span class="input-group-addon">Date: <strong>[string]</strong></span>
+                    <input type="text" id="date:" class="form-control">
+                </div>
+                <div class="input-group-btn">
+                    <span class="input-group-addon">Hour Start: <strong>[&gt;=]</strong></span>
+                    <input type="text" id="hourStart:" class="form-control">
+                </div>
+                <div class="input-group-btn">
+                    <span class="input-group-addon">Hour End: <strong>[&lt;=]</strong></span>
+                    <input type="text" id="hourEnd:" class="form-control">
+                </div>
+                <div class="input-group-btn">
+                    <span class="input-group-addon">NSU: <strong>[number]</strong></span>
+                    <input type="text" id="nsu" class="form-control">
+                </div>
+                <div class="input-group-btn">
+                    <span class="input-group-addon">User: <strong>[like]</strong></span>
+                    <input type="text" id="user" class="form-control">
+                </div>
+                <div class="input-group-btn">
+                    <span class="input-group-addon">Url: <strong>[like]</strong></span>
+                    <input type="text" id="url" class="form-control">
+                </div>
+                <div class="input-group-btn">
+                    <span class="input-group-addon">Tenant: <strong>[number]</strong></span>
+                    <input type="text" id="tenant" class="form-control">
+                </div>
+            </div>
+            -->
+            <button class="btn btn-primary btn-xs btn-block" onclick="app.refresh();">Refresh</button>
         </div>
         <div class="row">
             <table id="datatable" class="display compact" style="width:100%">
@@ -98,6 +147,7 @@
     <script src="js/file.js"></script>
     <script src="js/db.js"></script>
     <script src="js/config.js"></script>
+    <script src="js/arguments.js"></script>
     <script src="config/db-stagelog.config"></script>
     <script src="js/main.js"></script>
 </body>

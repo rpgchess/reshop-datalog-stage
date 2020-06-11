@@ -43,23 +43,28 @@ var system = {
     ws: {},
     env: {
         appData: '',
+        progFiles: '',
+        temp: '',
         userName: '',
         userProfile: '',
         winDir: ''
     },
     create: function() {
         this.ws = new ActiveXObject("WScript.Shell");
-        arrTemp = String(this.ws.ExpandEnvironmentStrings(this.enum.APP_DATA + ',' + this.enum.USER_NAME + ',' + this.enum.USER_PROFILE + ',' + this.enum.WIN_DIR)).split(',');
+        arrTemp = String(this.ws.ExpandEnvironmentStrings(this.enum.APP_DATA + ',' + this.enum.PROGRAM_FILES + ',' + this.enum.TEMP + ',' + this.enum.USER_NAME + ',' + this.enum.USER_PROFILE + ',' + this.enum.WIN_DIR)).split(',');
         this.env.appData = arrTemp[0];
-        this.env.userName = arrTemp[1];
-        this.env.userProfile = arrTemp[2];
-        this.env.winDir = arrTemp[3];
+        this.env.progFiles = arrTemp[1]
+        this.env.temp = arrTemp[2]
+        this.env.userName = arrTemp[3];
+        this.env.userProfile = arrTemp[4];
+        this.env.winDir = arrTemp[5];
     },
     getEnviroment: function(variable) {
         return String(this.ws.ExpandEnvironmentStrings(variable));
     },
     showEnv: function() {
         alert(this.env.appData + '\n'
+            + this.env.temp + '\n'
             + this.env.userName + '\n'
             + this.env.userProfile + '\n'
             + this.env.winDir
