@@ -16,7 +16,10 @@ var app = {
         retrieve: true,
         autoWidth: false,
         columnDefs: [
-            { width: "140px", "targets": 0 }
+            { width: "140px", targets: [0] },
+            //{ className: "dt-head-center", targets: [ 0 ] },
+            //{ className: "dt-body-center", targets: [ 1, 2, 3 ] },
+            { className: "dt-center", targets: [1, 3, 4, 5, 6 , 7] }
         ],
         lengthChange: false,
         paging: true,
@@ -105,13 +108,9 @@ var app = {
             btnNote = makeButton('note', 'warning', 'openType(' + index + ', \'both\');');
             btnNoteReq = makeButton('note', 'warning', 'openType(' + index + ', \'req\');');
             btnNoteRes = makeButton('note', 'warning', 'openType(' + index + ', \'res\');');
-            btnClient =  makeButton('copy', 'primary', 'copyType(' + index + ', \'guid\');');
-            /*
-            btnUser = makeButton(that.rows[index][that.cols.USER], 'default', '', removeStringsType('user-domain', row[that.cols.USER]), 'top');
-            btnTerminal = makeButton(that.rows[index][that.cols.TERMINAL], 'default', '');
-            */
+            btnClient =  makeButton('copy', 'primary', 'copyType(' + index + ', \'guid\');', row[that.cols.GUID], 'top');
             btnGroupEnd = '</div>';
-    
+
             that.table.row.add([
                 (isExist(that.rows[index][that.cols.DATE]))? that.rows[index][that.cols.DATE] : '',
                 (isExist(that.rows[index][that.cols.NSU]))? that.rows[index][that.cols.NSU] : '',
@@ -119,15 +118,15 @@ var app = {
                 (isExist(that.rows[index][that.cols.REQUEST]) && 
                  isExist(that.rows[index][that.cols.RESPONSE]))? btnGroupStart + btnCopyReq + btnSaveReq + btnNoteReq + btnCopy + btnSave + btnNote + btnCopyRes + btnSaveRes + btnNoteRes + btnGroupEnd : '',
                 (isExist(that.rows[index][that.cols.TENANT]))? that.rows[index][that.cols.TENANT] : '',
-                (isExist(that.rows[index][that.cols.USER]))? that.rows[index][that.cols.USER] : '',
+                (isExist(that.rows[index][that.cols.USER]))? '<p data-toggle="tooltip" data-placement="top" title="' + removeStringsType('user-domain', row[that.cols.USER]) + '">' + removeStringsType('user', row[that.cols.USER]) + '</p>' : '',
                 (isExist(that.rows[index][that.cols.GUID]))? btnGroupStart + btnClient + btnGroupEnd : '',
                 (isExist(that.rows[index][that.cols.TERMINAL]))? that.rows[index][that.cols.TERMINAL] : ''
-                /*
-                (isExist(that.rows[index][that.cols.USER]))? btnGroupStart + btnUser + btnGroupEnd : '',
-                (isExist(that.rows[index][that.cols.TERMINAL]))? btnGroupStart + btnTerminal + btnGroupEnd : ''
-                */
             ]).draw(false);
         });
+        this.hint();
+    },
+    hint: function() {
+        $('[data-toggle="tooltip"]').tooltip();
     },
     resize: function(width, height) {
         var width = isExist(width)? width : screen.availWidth - (screen.availWidth * 0.1),
@@ -148,7 +147,7 @@ function removeStringsType(type, text) {
     var sTemp = '';
     switch (type) {
         case 'url': sTemp = removeStrings(text, ['http://', 'https://', 'unicostage.azurewebsites.net', 'reshop-stage.linx.com.br', 'localhost:52401']); break;
-        case 'url-file': sTemp =  removeStrings(text, ['/api/', 'fidelidade/', 'ecommerce/', 'statistics/', 'posdata/', 'setup/']).split('?')[0]; break;
+        case 'url-file': sTemp =  removeStrings(text, ['/api/', 'fidelidade/', 'ecommerce/', 'statistics/', 'posdata/', 'setup/', 'LinxCommerce/', 'web-api/', 'v1/', 'Sales/', 'Delivery/', 'FreightQuote/', 'API.svc/', 'web/', 'Get/']).split('?')[0]; break;
         case 'date': sTemp = text.split(' UTC')[0]; break;
         case 'user': sTemp = text.split('@')[0]; break;
         case 'user-domain': sTemp = text.split('@')[1]; break;
@@ -240,4 +239,5 @@ function setFilename(name) {
 
 $(document).ready(function () {
     app.init();
+    $('[data-toggle="tooltip"]').tooltip();
 });
