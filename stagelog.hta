@@ -25,8 +25,11 @@
     />
 
     <!-- Bootstrap links CDN-->
-    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/3.3.2/css/bootstrap.min.css">
-    <link rel="stylesheet" href="https://cdn.datatables.net/1.10.19/css/jquery.dataTables.min.css">
+    <link rel="stylesheet" href="../libs/bootstrap/3.3.2/css/bootstrap.min.css">
+    <link rel="stylesheet" href="../libs/jquery/datatables/1.10.21/datatables.min.css">
+    <link rel="stylesheet" href="../libs/alertifyjs/1.13.1/css/alertify.min.css">
+    <link rel="stylesheet" href="../libs/alertifyjs/1.13.1/css/themes/semantic.min.css">
+
     <link rel="stylesheet" href="css/style.css">
 </head>
 <body>
@@ -67,55 +70,9 @@
                     </ul>
                 </div>
                 <input type="text" name="editor" id="editor" class="form-control" aria-describedby="sizing-addon3"> 
-                <!--
-                <div class="input-group-btn">
-                    <span class="input-group-addon">Name:</span>
-                </div>
-                <input type="text" name="name" id="name" class="form-control" aria-describedby="sizing-addon3">
-                <div class="input-group-btn">
-                    <span class="input-group-addon">Sulffix:</span>
-                </div>
-                <input type="text" name="suffix" id="suffix" class="form-control" aria-describedby="sizing-addon3">
-                -->
             </div>
         </div>
         <div class="row">
-        <!--
-            <div class="input-group input-group-sm">
-                <div class="input-group-btn">
-                    <span class="input-group-addon">Qtde: <strong>[top]</strong></span>
-                    <input type="text" id="qtde:" class="form-control">
-                </div>
-                <div class="input-group-btn">
-                    <span class="input-group-addon">Date: <strong>[string]</strong></span>
-                    <input type="text" id="date:" class="form-control">
-                </div>
-                <div class="input-group-btn">
-                    <span class="input-group-addon">Hour Start: <strong>[&gt;=]</strong></span>
-                    <input type="text" id="hourStart:" class="form-control">
-                </div>
-                <div class="input-group-btn">
-                    <span class="input-group-addon">Hour End: <strong>[&lt;=]</strong></span>
-                    <input type="text" id="hourEnd:" class="form-control">
-                </div>
-                <div class="input-group-btn">
-                    <span class="input-group-addon">NSU: <strong>[number]</strong></span>
-                    <input type="text" id="nsu" class="form-control">
-                </div>
-                <div class="input-group-btn">
-                    <span class="input-group-addon">User: <strong>[like]</strong></span>
-                    <input type="text" id="user" class="form-control">
-                </div>
-                <div class="input-group-btn">
-                    <span class="input-group-addon">Url: <strong>[like]</strong></span>
-                    <input type="text" id="url" class="form-control">
-                </div>
-                <div class="input-group-btn">
-                    <span class="input-group-addon">Tenant: <strong>[number]</strong></span>
-                    <input type="text" id="tenant" class="form-control">
-                </div>
-            </div>
-            -->
             <button class="btn btn-primary btn-xs btn-block" onclick="app.refresh();">Refresh</button>
         </div>
         <div class="row">
@@ -139,9 +96,10 @@
         </div>
     </div>
     <!-- Dependência jQuery and Bootstrap -->
-    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.2/jquery.min.js"></script>
-    <script src="https://stackpath.bootstrapcdn.com/bootstrap/3.3.2/js/bootstrap.min.js"></script>
-    <script src="https://cdn.datatables.net/1.10.19/js/jquery.dataTables.min.js"></script>
+    <script src="../libs/jquery/3.5.1/jquery.min.js"></script>
+    <script src="../libs/bootstrap/3.3.2/js/bootstrap.min.js"></script>
+    <script src="../libs/jquery/datatables/1.10.21/datatables.min.js"></script>
+    <script src="../libs/alertifyjs/1.13.1/alertify.min.js"></script>
     <script src="js/utils.js"></script>
     <script src="js/system.js"></script>
     <script src="js/file.js"></script>

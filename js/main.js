@@ -1,4 +1,8 @@
 var app = {
+    mapUrlView = ['http://', 'https://', 'unicostage.azurewebsites.net', 'reshop-stage.linx.com.br', 'localhost:52401'],
+    mapUrlFile = ['/api/', 'api/', 'fidelidade/', 'ecommerce/', 'statistics/', 'posdata/', 'setup/', 'account/',
+                  'salesmanapp/', 'OracleCloudCommerce/', 'LinxCommerce/web-api/v1/Sales/Delivery/FreightQuote/API.svc/web/Get/',
+                  'occ-order-shipping/', 'ccstorex/custom/v1/public/api-hml/occ-store-delivery/store/'],
     rows: [],
     cols: {
         DATE: 0,
@@ -128,6 +132,22 @@ var app = {
     hint: function() {
         $('[data-toggle="tooltip"]').tooltip();
     },
+    notify: function(type, title, text, delay, position) {
+        alertify.defaults.transition = "slide";
+        sTemp = (title)? title + ':\n' : '';
+        sTemp += text;
+        delay = (delay)? delay : 5;
+        position = (position)? position : 'bottom-left';
+        alertify.set('notifier','delay', delay);
+        alertify.set('notifier','position', position);
+        switch(type){
+            //case 'custom': alertify.notify(sTemp, 'custom'); break;
+            case 'success': alertify.success(sTemp); break;
+            case 'warning': alertify.warning(sTemp); break;
+            case 'error': alertify.error(sTemp); break;
+            default: alertify.message(sTemp);
+        }
+    },
     resize: function(width, height) {
         var width = isExist(width)? width : screen.availWidth - (screen.availWidth * 0.1),
             height = isExist(height)? height : screen.availHeight - (screen.availHeight * 0.2),
@@ -146,8 +166,8 @@ var app = {
 function removeStringsType(type, text) {
     var sTemp = '';
     switch (type) {
-        case 'url': sTemp = removeStrings(text, ['http://', 'https://', 'unicostage.azurewebsites.net', 'reshop-stage.linx.com.br', 'localhost:52401']); break;
-        case 'url-file': sTemp =  removeStrings(text, ['/api/', 'fidelidade/', 'ecommerce/', 'statistics/', 'posdata/', 'setup/', 'LinxCommerce/', 'web-api/', 'v1/', 'Sales/', 'Delivery/', 'FreightQuote/', 'API.svc/', 'web/', 'Get/']).split('?')[0]; break;
+        case 'url': sTemp = removeStrings(text, app.mapUrlView); break;
+        case 'url-file': sTemp =  removeStrings(text, app.mapUrlFile).split('?')[0]; break;
         case 'date': sTemp = text.split(' UTC')[0]; break;
         case 'user': sTemp = text.split('@')[0]; break;
         case 'user-domain': sTemp = text.split('@')[1]; break;
@@ -164,15 +184,20 @@ function concatFilepathString(index, filepath, filename, url) {
 }
 
 function makeStringAndSaveJSON(index, requestType) {
+    bTemp = false;
     sFilename = concatFilepathString(index + 1, getFilepath(), getFilename(), removeStringsType('url-file', app.rows[index][app.cols.URL]));
     switch (requestType) {
-        case 'req': file.saveJSON(sFilename + '.req', app.rows[index][app.cols.REQUEST]); break;
-        case 'res': file.saveJSON(sFilename + '.res', app.rows[index][app.cols.RESPONSE]); break;
+        case 'req': file.saveJSON(sFilename + '.req', app.rows[index][app.cols.REQUEST]); bTemp = true; break;
+        case 'res': file.saveJSON(sFilename + '.res', app.rows[index][app.cols.RESPONSE]); bTemp = true; break;
         case 'both':
             file.saveJSON(sFilename + '.req', app.rows[index][app.cols.REQUEST]);
             file.saveJSON(sFilename + '.res', app.rows[index][app.cols.RESPONSE]);
-            break;
+            bTemp = true;
     }
+    if (bTemp)
+        app.notify('success', 'File Save', sFilename);
+    else
+        app.notify('error', 'File Not Save', sFilename);
 }
 
 function makeButton(name, color, eventClick, hint, hintPosition) {
@@ -239,5 +264,5 @@ function setFilename(name) {
 
 $(document).ready(function () {
     app.init();
-    $('[data-toggle="tooltip"]').tooltip();
+    app.hint();
 });

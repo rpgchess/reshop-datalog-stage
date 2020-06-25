@@ -32,7 +32,7 @@ var file = {
     saveJSON: function(filename, content) {
         this.saveExt(filename, '.json', content);
     }
-}
+};
 
 file.create();
 /*
