@@ -1,6 +1,7 @@
 var app = {
-    mapUrlView = ['http://', 'https://', 'unicostage.azurewebsites.net', 'reshop-stage.linx.com.br', 'localhost:52401'],
-    mapUrlFile = ['/api/', 'api/', 'fidelidade/', 'ecommerce/', 'statistics/', 'posdata/', 'setup/', 'account/',
+    mapUrlView: ['http://', 'https://', 'unicostage.azurewebsites.net', 'reshop-stage.linx.com.br', 'localhost:52401',
+                 'www.unicosistemas.com.br', 'reshop.linx.com.br'],
+    mapUrlFile: ['/api/', 'api/', 'fidelidade/', 'ecommerce/', 'statistics/', 'posdata/', 'setup/', 'account/',
                   'salesmanapp/', 'OracleCloudCommerce/', 'LinxCommerce/web-api/v1/Sales/Delivery/FreightQuote/API.svc/web/Get/',
                   'occ-order-shipping/', 'ccstorex/custom/v1/public/api-hml/occ-store-delivery/store/'],
     rows: [],
@@ -35,7 +36,8 @@ var app = {
     height: null,
     init: function() {
         args.hta = reshop.commandLine.split(' ');
-        if (!isExist(args.hta[2]) && !isExist(args.hta[3])) {
+        args.begin = (args.hta[1] === "")? 3 : 2;
+        if (!isExist(args.hta[args.begin-1]) || !isExist(args.hta[args.begin])) {
             args.screen();
             return false;
         }
@@ -47,54 +49,52 @@ var app = {
         this.refresh();
     },
     refresh: function() {
-        db_stagelog.openConnection();
-    
-        switch (args.hta[2]) {
-            case '-qtd': db_stagelog.selectRecents(args.hta[3]); break;
-            case '-q': db_stagelog.selectRecents(args.hta[3]); break;
-            case '-nsu': db_stagelog.selectNsu(args.hta[3]); break;
-            case '-n': db_stagelog.selectNsu(args.hta[3]); break;
-            case '-user': db_stagelog.selectUser(args.hta[3]); break;
-            case '-u': db_stagelog.selectUser(args.hta[3]); break;
-            case '-user-url': db_stagelog.selectUserUrl(args.hta[3], args.hta[4]); break;
-            case '-uu': db_stagelog.selectUserUrl(args.hta[3], args.hta[4]); break;
-            case '-qtd-user': db_stagelog.selectTopUser(args.hta[3], args.hta[4]); break;
-            case '-qu': db_stagelog.selectTopUser(args.hta[3], args.hta[4]); break;
-            case '-qtd-user-url': db_stagelog.selectTopUserUrl(args.hta[3], args.hta[4], args.hta[5]); break;
-            case '-quu': db_stagelog.selectTopUserUrl(args.hta[3], args.hta[4], args.hta[5]); break;
-            case '-tenant': db_stagelog.selectTenant(args.hta[3]); break;
-            case '-t': db_stagelog.selectTenant(args.hta[3]); break;
-            case '-qtd-tenant': db_stagelog.selectTopTenant(args.hta[3], args.hta[4]); break;
-            case '-qt': db_stagelog.selectTopTenant(args.hta[3], args.hta[4]); break;
-            case '-url': db_stagelog.selectUrl(args.hta[3]); break;
-            case '-qtd-url': db_stagelog.selectTopUrl(args.hta[3], args.hta[4]); break;
-            case '-tenant-url': db_stagelog.selectTenantUrl(args.hta[3], args.hta[4]); break;
-            case '-tu': db_stagelog.selectTenantUrl(args.hta[3], args.hta[4]); break;
-            case '-qtd-tenant-url': db_stagelog.selectTopTenantUrl(args.hta[3], args.hta[4], args.hta[5]); break;
-            case '-qtu': db_stagelog.selectTopTenantUrl(args.hta[3], args.hta[4], args.hta[5]); break;
+        db_log.openConnection();
+
+        switch (args.hta[args.begin-1]) {
+            case '-qtd': db_log.selectRecents(args.hta[args.begin]); break;
+            case '-q': db_log.selectRecents(args.hta[args.begin]); break;
+            case '-nsu': db_log.selectNsu(args.hta[args.begin]); break;
+            case '-n': db_log.selectNsu(args.hta[args.begin]); break;
+            case '-user': db_log.selectUser(args.hta[args.begin]); break;
+            case '-u': db_log.selectUser(args.hta[args.begin]); break;
+            case '-user-url': db_log.selectUserUrl(args.hta[args.begin], args.hta[args.begin+1]); break;
+            case '-uu': db_log.selectUserUrl(args.hta[args.begin], args.hta[args.begin+1]); break;
+            case '-qtd-user': db_log.selectTopUser(args.hta[args.begin], args.hta[args.begin+1]); break;
+            case '-qu': db_log.selectTopUser(args.hta[args.begin], args.hta[args.begin+1]); break;
+            case '-qtd-user-url': db_log.selectTopUserUrl(args.hta[args.begin], args.hta[args.begin+1], args.hta[args.begin+2]); break;
+            case '-quu': db_log.selectTopUserUrl(args.hta[args.begin], args.hta[args.begin+1], args.hta[args.begin+2]); break;
+            case '-tenant': db_log.selectTenant(args.hta[args.begin]); break;
+            case '-t': db_log.selectTenant(args.hta[args.begin]); break;
+            case '-qtd-tenant': db_log.selectTopTenant(args.hta[args.begin], args.hta[args.begin+1]); break;
+            case '-qt': db_log.selectTopTenant(args.hta[args.begin], args.hta[args.begin+1]); break;
+            case '-url': db_log.selectUrl(args.hta[args.begin]); break;
+            case '-qtd-url': db_log.selectTopUrl(args.hta[args.begin], args.hta[args.begin+1]); break;
+            case '-tenant-url': db_log.selectTenantUrl(args.hta[args.begin], args.hta[args.begin+1]); break;
+            case '-tu': db_log.selectTenantUrl(args.hta[args.begin], args.hta[args.begin+1]); break;
+            case '-qtd-tenant-url': db_log.selectTopTenantUrl(args.hta[args.begin], args.hta[args.begin+1], args.hta[args.begin+2]); break;
+            case '-qtu': db_log.selectTopTenantUrl(args.hta[args.begin], args.hta[args.begin+1], args.hta[args.begin+2]); break;
         }
     
         this.reset();
-    
-        db_stagelog.record.MoveFirst();
-    
-        while (!db_stagelog.record.EOF) {
+        
+        while (!db_log.record.EOF) {
             this.rows.push([
-                String(db_stagelog.record('Datetime').value),
-                String(db_stagelog.record('TransactionNumber').value),
-                String(db_stagelog.record('Url').value),
-                String(db_stagelog.record('RequestContent').value),
-                String(db_stagelog.record('ResponseContent').value),
-                String(db_stagelog.record('TenantId').value),
-                String(db_stagelog.record('UserId').value),
-                String(db_stagelog.record('ClientId').value),
-                String(db_stagelog.record('TerminalCode').value)
+                String(db_log.record('Datetime').value),
+                String(db_log.record('TransactionNumber').value),
+                String(db_log.record('Url').value),
+                String(db_log.record('RequestContent').value),
+                String(db_log.record('ResponseContent').value),
+                String(db_log.record('TenantId').value),
+                String(db_log.record('UserId').value),
+                String(db_log.record('ClientId').value),
+                String(db_log.record('TerminalCode').value)
             ]);
     
-            db_stagelog.record.MoveNext();
+            db_log.record.MoveNext();
         }
     
-        db_stagelog.closeConnection();
+        db_log.closeConnection();
         var that = this;
         this.rows.forEach(function (row, index, rows) {
             that.rows[index][that.cols.DATE] = removeStringsType('date', row[that.cols.DATE]);
@@ -102,14 +102,14 @@ var app = {
             //that.rows[index][that.cols.USER] = removeStringsType('user', row[that.cols.USER]);
     
             btnGroupStart = '<div class=\'btn-group btn-group-xs\' role=\'group\' >';
-            btnCopy = makeButton('copy', 'primary', 'copyType(' + index + ', \'both\');');
+            btnCopy = makeButton('both', 'primary', 'copyType(' + index + ', \'both\');');
             btnCopyReq = makeButton('copy', 'primary', 'copyType(' + index + ', \'req\');');
             btnCopyRes = makeButton('copy', 'primary', 'copyType(' + index + ', \'res\');');
             btnSave = makeButton('both', 'success', 'makeStringAndSaveJSON(' + index + ', \'both\');');
             btnSaveReq = makeButton('save', 'success', 'makeStringAndSaveJSON(' + index + ', \'req\');');
             btnSaveRes = makeButton('save', 'success', 'makeStringAndSaveJSON(' + index + ', \'res\');');
             btnSaveAll = makeButton('save', 'success', '');
-            btnNote = makeButton('note', 'warning', 'openType(' + index + ', \'both\');');
+            btnNote = makeButton('both', 'warning', 'openType(' + index + ', \'both\');');
             btnNoteReq = makeButton('note', 'warning', 'openType(' + index + ', \'req\');');
             btnNoteRes = makeButton('note', 'warning', 'openType(' + index + ', \'res\');');
             btnClient =  makeButton('copy', 'primary', 'copyType(' + index + ', \'guid\');', row[that.cols.GUID], 'top');

@@ -10,6 +10,7 @@ var args = {
         TENANT: 7
     },
     hta: [],
+    begin: 0,
     appFilepath: '',
     flags: [
         {enable: false, value: '' },

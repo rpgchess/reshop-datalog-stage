@@ -1,13 +1,13 @@
 <!DOCTYPE html>
-<html lang="en">
+<html dir="ltr" lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta http-equiv="x-ua-compatible" content="ie=9">
+    <meta http-equiv="x-ua-compatible" content="ie=9,chrome=1">
     <title>RESHOP STAGE LOG</title>
     <HTA:APPLICATION
         ID="reshop"
-        APPLICATIONNAME="DB"
+        APPLICATIONNAME="StageLog"
         BORDER="thin"
         BORDERSTYLE="normal"
         CAPTION="yes"
@@ -24,13 +24,14 @@
         WINDOWSTATE="normal"
     />
 
-    <!-- Bootstrap links CDN-->
+    <!-- Bootstrap, Datatables and Alertify -->
     <link rel="stylesheet" href="../libs/bootstrap/3.3.2/css/bootstrap.min.css">
     <link rel="stylesheet" href="../libs/jquery/datatables/1.10.21/datatables.min.css">
     <link rel="stylesheet" href="../libs/alertifyjs/1.13.1/css/alertify.min.css">
     <link rel="stylesheet" href="../libs/alertifyjs/1.13.1/css/themes/semantic.min.css">
-
+    <!-- Styles -->
     <link rel="stylesheet" href="css/style.css">
+    <link rel="stylesheet" href="css/btn-toggle.css">
 </head>
 <body>
     <div class="container-fluid">
@@ -69,11 +70,18 @@
                         <li><a href="javascript:setEditor('C:\\Program Files\\Notepad++\\notepad++.exe');">Notepad++</a></li>
                     </ul>
                 </div>
-                <input type="text" name="editor" id="editor" class="form-control" aria-describedby="sizing-addon3"> 
+                <input type="text" name="editor" id="editor" class="form-control" aria-describedby="sizing-addon3">
+                <!--
+                <div class="input-group-addon">
+                    <button type="button" class="btn btn-toggle" data-toggle="button" aria-pressed="false" autocomplete="off" onclick="prod = !prod; if (prod) $('#refresh').toggleClass('btn-success'); else $('#refresh').toggleClass('btn-success'); app.refresh();">
+                        <div class="handle"></div>
+                    </button>
+                </div>
+                -->
             </div>
         </div>
         <div class="row">
-            <button class="btn btn-primary btn-xs btn-block" onclick="app.refresh();">Refresh</button>
+            <button id="refresh" class="btn btn-primary btn-xs btn-block" onclick="app.refresh();">Refresh</button>
         </div>
         <div class="row">
             <table id="datatable" class="display compact" style="width:100%">
@@ -95,18 +103,22 @@
             </table>
         </div>
     </div>
-    <!-- Dependência jQuery and Bootstrap -->
+    <!-- Dependência jQuery, Bootstrap, Datatables and Alertify -->
     <script src="../libs/jquery/3.5.1/jquery.min.js"></script>
     <script src="../libs/bootstrap/3.3.2/js/bootstrap.min.js"></script>
     <script src="../libs/jquery/datatables/1.10.21/datatables.min.js"></script>
     <script src="../libs/alertifyjs/1.13.1/alertify.min.js"></script>
-    <script src="js/utils.js"></script>
-    <script src="js/system.js"></script>
-    <script src="js/file.js"></script>
-    <script src="js/db.js"></script>
-    <script src="js/config.js"></script>
-    <script src="js/arguments.js"></script>
+    <!-- Dependências Includes ADO and Utils -->
+    <script src="../inc/utils.js"></script>
+    <script src="../inc/ado/system.js"></script>
+    <script src="../inc/ado/file.js"></script>
+    <script src="../inc/ado/db.js"></script>
+    <!-- Database -->
     <script src="config/db-stagelog.config"></script>
+    <!-- <script src="config/db-prodlog.config"></script> -->
+    <script src="js/db-log.js"></script>
+    <!-- Source -->
+    <script src="js/arguments.js"></script>
     <script src="js/main.js"></script>
 </body>
 </html>
