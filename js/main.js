@@ -1,8 +1,9 @@
 var app = {
     mapUrlView: ['http://', 'https://', 'unicostage.azurewebsites.net', 'reshop-stage.linx.com.br', 'localhost:52401',
-                 'www.unicosistemas.com.br', 'reshop.linx.com.br'],
+                 'www.unicosistemas.com.br', 'reshop.linx.com.br', 'unicostage-release.azurewebsites.net', 'unicostage-food.azurewebsites.net', 
+                 'unicostage-dev.azurewebsites.net', 'unicostage-test.azurewebsites.net', 'reshop-v1.linx.com.br'],
     mapUrlFile: ['/api/', 'api/', 'fidelidade/', 'ecommerce/', 'statistics/', 'posdata/', 'setup/', 'account/',
-                  'salesmanapp/', 'OracleCloudCommerce/', 'LinxCommerce/web-api/v1/Sales/Delivery/FreightQuote/API.svc/web/Get/',
+                  'salesmanapp/', 'integration/', 'OracleCloudCommerce/', 'LinxCommerce/web-api/v1/Sales/Delivery/FreightQuote/API.svc/web/Get/',
                   'occ-order-shipping/', 'ccstorex/custom/v1/public/api-hml/occ-store-delivery/store/'],
     rows: [],
     cols: {
@@ -37,15 +38,16 @@ var app = {
     init: function() {
         args.hta = reshop.commandLine.split(' ');
         args.begin = (args.hta[1] === "")? 3 : 2;
-        if (!isExist(args.hta[args.begin-1]) || !isExist(args.hta[args.begin])) {
-            args.screen();
-            return false;
-        }
+        //if (!isExist(args.hta[args.begin-1]) || !isExist(args.hta[args.begin])) {
+        //    args.screen();
+        //    return false;
+        //}
 
         this.resize(null, 637);
         setFilename('LinxPOS');
         setFilepath(system.env.userProfile + '\\Desktop\\');
-        setEditor(system.env.winDir + '\\notepad.exe');
+        setEditor(system.env.sysDrive + '\\Program Files\\Notepad++\\notepad++.exe');
+        //setEditor(system.env.winDir + '\\notepad.exe');
         this.refresh();
     },
     refresh: function() {
@@ -98,7 +100,8 @@ var app = {
         var that = this;
         this.rows.forEach(function (row, index, rows) {
             that.rows[index][that.cols.DATE] = removeStringsType('date', row[that.cols.DATE]);
-            that.rows[index][that.cols.URL] = removeStringsType('url', row[that.cols.URL]);
+            btnEnviroment = makeLabelEnviroment(that.rows[index][that.cols.URL])
+            that.rows[index][that.cols.URL] = removeStringsType('url', that.rows[index][that.cols.URL]);
             //that.rows[index][that.cols.USER] = removeStringsType('user', row[that.cols.USER]);
     
             btnGroupStart = '<div class=\'btn-group btn-group-xs\' role=\'group\' >';
@@ -118,7 +121,7 @@ var app = {
             that.table.row.add([
                 (isExist(that.rows[index][that.cols.DATE]))? that.rows[index][that.cols.DATE] : '',
                 (isExist(that.rows[index][that.cols.NSU]))? that.rows[index][that.cols.NSU] : '',
-                (isExist(that.rows[index][that.cols.URL]))? that.rows[index][that.cols.URL] : '',
+                (isExist(that.rows[index][that.cols.URL]))? btnGroupStart + btnEnviroment + btnGroupEnd + ' ' + that.rows[index][that.cols.URL] : '',
                 (isExist(that.rows[index][that.cols.REQUEST]) && 
                  isExist(that.rows[index][that.cols.RESPONSE]))? btnGroupStart + btnCopyReq + btnSaveReq + btnNoteReq + btnCopy + btnSave + btnNote + btnCopyRes + btnSaveRes + btnNoteRes + btnGroupEnd : '',
                 (isExist(that.rows[index][that.cols.TENANT]))? that.rows[index][that.cols.TENANT] : '',
@@ -161,6 +164,27 @@ var app = {
         this.rows = [];
         this.table.clear().draw();
     }
+}
+
+function makeLabelEnviroment(text) {
+    var sTemp = '';
+    if (text.includes('reshop-stage.linx', 0))
+        sTemp = makeButton('stage', 'primary', 'copy(\''+ text +'\');', 'https://reshop-stage.linx.com.br', 'top');
+    else if (text.includes('unicostage.azurewebsites', 0))
+        sTemp = makeButton('stage', 'warning', 'copy(\''+ text +'\');', 'https://unicostage.azurewebsites.net', 'top');
+    else if (text.includes('unicostage-food.azurewebsites', 0))
+        sTemp = makeButton('food', 'primary', 'copy(\''+ text +'\');', 'https://unicostage-food.azurewebsites.net', 'top');
+    else if (text.includes('unicostage-release.azurewebsites', 0))
+        sTemp = makeButton('release', 'primary', 'copy(\''+ text +'\');', 'https://unicostage-release.azurewebsites.net', 'top');
+    else if (text.includes('unicosistemas-dev.azurewebsites', 0))
+        sTemp = makeButton('dev', 'success', 'copy(\''+ text +'\');', 'https://unicosistemas-dev.azurewebsites.net', 'top');
+    else if (text.includes('unicosistemas.com.br', 0))
+        sTemp = makeButton('prod', 'warning', 'copy(\''+ text +'\');', 'https://unicosistemas.com.br', 'top');
+    else if (text.includes('reshop-v1.linx', 0))
+        sTemp = makeButton('slot', 'success', 'copy(\''+ text +'\');', 'https://reshop-v1.linx.com.br', 'top');
+    else if (text.includes('reshop.linx', 0))
+        sTemp = makeButton('prod', 'success', 'copy("'+ text +'");', 'https://reshop.linx.com.br', 'top');
+    return sTemp;
 }
 
 function removeStringsType(type, text) {
@@ -263,6 +287,20 @@ function setFilename(name) {
 }
 
 $(document).ready(function () {
+    if (!String.prototype.includes) {
+        String.prototype.includes = function(search, start) {
+            'use strict';
+            if (typeof start !== 'number') {
+                start = 0;
+            }
+        
+            if (start + search.length > this.length) {
+                return false;
+            } else {
+                return this.indexOf(search, start) !== -1;
+            }
+        };
+    }
     app.init();
     app.hint();
 });
